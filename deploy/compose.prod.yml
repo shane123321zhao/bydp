@@ -102,6 +102,8 @@ services:
       TZ: UTC
       ADMIN_API_URL: http://api:8787
       ADMIN_HOST: ${ADMIN_HOST:-}
+      # D-034：后台账号密码登录入口是否显示（只传开关；邮箱与哈希只在 web 的 Auth.js 校验里用，admin 不需要）
+      ADMIN_PASSWORD_LOGIN: ${ADMIN_PASSWORD_LOGIN:-}
     depends_on:
       api: { condition: service_started }
     working_dir: /app/apps/admin

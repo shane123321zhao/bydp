@@ -21,6 +21,7 @@
     "./identity/pii": "./src/identity/pii.ts",
     "./identity/magic-link-email": "./src/identity/magic-link-email.ts",
     "./identity/authjs": "./src/identity/authjs.ts",
+    "./identity/password-login": "./src/identity/password-login.ts",
     "./identity/me": "./src/identity/me.ts",
     "./identity/self-exclusion": "./src/identity/self-exclusion.ts",
     "./identity/points": "./src/identity/points.ts",

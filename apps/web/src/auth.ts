@@ -13,7 +13,8 @@ import { MAGIC_LINK_MAX_AGE_SEC, resendSender } from '@bydp/core/identity/magic-
 import { identityKeysFromEnv, normalizeEmail } from '@bydp/core/identity/pii';
 import { DEVICE_COOKIE, DEVICE_ID, deviceFingerprint, recordDeviceLogin } from '@bydp/core/identity/device';
 import { cookies } from 'next/headers';
-import { IdentityBlockedError, probeIdentityBlocked } from '@bydp/core/identity/auth';
+import { findUserByEmail, IdentityBlockedError, probeIdentityBlocked, userSessionEpoch } from '@bydp/core/identity/auth';
+import { auditPasswordLogin, authorizePasswordLogin, passwordLoginConfigFromEnv } from '@bydp/core/identity/password-login';
 import NextAuth, { CredentialsSignin } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Resend from 'next-auth/providers/resend';
@@ -70,6 +71,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw e;
         }
       },
+    }),
+    // D-034：后台账号密码登录（测试站开关，缺省关闭；只认 .env.prod 白名单的单个邮箱；正式环境不启用）。入口页在 apps/admin /admin/login
+    Credentials({
+      id: 'admin-password',
+      name: '后台密码登录',
+      credentials: { email: {}, password: {} },
+      authorize: async (c, req) =>
+        (await authorizePasswordLogin(
+          {
+            config: passwordLoginConfigFromEnv(),
+            counter: rateCounter(),
+            findUserId: (email) => findUserByEmail(db(), email, (keys ??= identityKeysFromEnv())),
+            epochOf: (userId) => userSessionEpoch(db(), userId),
+            audit: (e) => auditPasswordLogin(db(), e),
+          },
+          { email: c?.email, password: c?.password, ip: clientIp(req) },
+        )) as never,
     }),
     Resend({
       maxAge: MAGIC_LINK_MAX_AGE_SEC,

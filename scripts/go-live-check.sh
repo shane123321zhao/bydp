@@ -62,5 +62,7 @@ c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://$DOMAIN/")
 # W3#074 补充：canonical 指向正式主站域名（AUTH_URL 错填 / 未内联时会落到 localhost 或测试站，搜索收录随之出错）
 CAN=$(curl -s --max-time 15 "https://$DOMAIN/" | grep -oE '<link rel="canonical" href="[^"]+"' | head -1 | sed -E 's/.*href="([^"]+)"/\1/')
 [ "${CAN%/}" = "https://$DOMAIN" ] && pass "首页 canonical 指向正式主站（$CAN）" || fail "首页 canonical 不是 https://$DOMAIN（实际：${CAN:-无}）：检查 .env.prod 的 AUTH_URL 后重新部署（构建期内联）"
+# D-034：正式环境不得启用后台账号密码登录（代码在 BYDP_ENV=production 时已不启用，这里再查配置，防误配）
+[ "$(val ADMIN_PASSWORD_LOGIN)" = on ] && fail "正式环境 .env.prod 设置了 ADMIN_PASSWORD_LOGIN=on：删掉该行及 ADMIN_PASSWORD_EMAIL / ADMIN_PASSWORD_HASH 后重新部署" || pass "正式环境未启用后台账号密码登录"
 
 [ "$FAILS" -eq 0 ] && echo "—— 上线自检全部通过" || { echo "—— $FAILS 项失败"; exit 1; }

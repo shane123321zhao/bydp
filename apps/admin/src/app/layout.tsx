@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import '../styles/admin.css';
 import { call, type Role, type Session } from '../lib/api';
 import { ROLE_TEXT } from '../lib/labels';
@@ -21,6 +22,15 @@ const NAV: [href: string, label: string, roles: Role[]][] = [
 ];
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
+  // D-034：登录页（/admin/login）不需要会话即可渲染；其余页面照旧先校验会话
+  if ((await headers()).get('x-bydp-admin-path') === '/login')
+    return (
+      <html lang="zh-CN" data-bg="night" data-accent="green">
+        <body>
+          <main className="main">{children}</main>
+        </body>
+      </html>
+    );
   const s = await call<Session>('/session');
   return (
     <html lang="zh-CN" data-bg="night" data-accent="green">
