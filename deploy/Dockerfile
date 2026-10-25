@@ -9,7 +9,9 @@ FROM base AS build
 ARG BYDP_ENV=staging
 # D-025：站点绝对地址（canonical / hreflang / 结构化数据）须构建期内联——静态页在此生成；由 compose 从 .env.prod 的 AUTH_URL 传入
 ARG NEXT_PUBLIC_SITE_URL
-ENV BYDP_ENV=$BYDP_ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+# D-033：测试站顶部提示条开关（构建期；off = 不显示，缺省 on），由 compose 从 .env.prod 的 STAGING_MARK 传入
+ARG STAGING_MARK=on
+ENV BYDP_ENV=$BYDP_ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL STAGING_MARK=$STAGING_MARK
 COPY . .
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @bydp/web build && pnpm --filter @bydp/admin build

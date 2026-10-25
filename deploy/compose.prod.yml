@@ -58,7 +58,7 @@ services:
   # 一次性：迁移（owner）。角色密码与 seed 由 bootstrap.sh 在迁移后执行
   migrate:
     image: bydp-app:${BYDP_ENV:-staging}
-    build: { context: .., dockerfile: deploy/Dockerfile, args: { BYDP_ENV: "${BYDP_ENV:-staging}", NEXT_PUBLIC_SITE_URL: "${AUTH_URL:?AUTH_URL 未生成：先跑 bootstrap 第 4 步}" } }
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BYDP_ENV: "${BYDP_ENV:-staging}", NEXT_PUBLIC_SITE_URL: "${AUTH_URL:?AUTH_URL 未生成：先跑 bootstrap 第 4 步}", STAGING_MARK: "${STAGING_MARK:-on}" } }
     env_file: .env.prod
     environment:
       DATABASE_URL: postgres://bydp_owner:${POSTGRES_PASSWORD}@postgres:5432/bydp
