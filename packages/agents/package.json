@@ -1,0 +1,32 @@
+{
+  "name": "@bydp/agents",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./safe-fetch": "./src/safe-fetch.ts",
+    "./schemas": "./src/schemas.ts",
+    "./screening": "./src/screening.ts",
+    "./db": "./src/db.ts",
+    "./localization": "./src/localization.ts",
+    "./polite": "./src/polite.ts",
+    "./site-monitor": "./src/site-monitor.ts",
+    "./collector": "./src/collector.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "@bydp/db": "workspace:*",
+    "opencc-js": "1.4.2",
+    "zod": "^4.1.0",
+    "@bydp/i18n": "workspace:*",
+    "@bydp/entity-graph": "workspace:*"
+  }
+}

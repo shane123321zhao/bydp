@@ -1,0 +1,2 @@
+ALTER TABLE "offer" ADD COLUMN "termsText" text;--> statement-breakpoint
+ALTER TABLE "offer" ADD CONSTRAINT "offer_terms_text_length" CHECK ("offer"."termsText" is null or char_length("offer"."termsText") <= 5000);

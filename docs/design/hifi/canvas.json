@@ -1,0 +1,495 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Brand.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "03 品牌页 · 概览（Tab 可点）",
+      "w": 390,
+      "x": 0,
+      "y": 3500
+    },
+    "BrandComplaints.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "03 · 投诉 Tab",
+      "w": 390,
+      "x": 940,
+      "y": 3500
+    },
+    "BrandDomains.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "03 · 标识 Tab",
+      "w": 390,
+      "x": 1880,
+      "y": 3500
+    },
+    "BrandNight.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "03 品牌页 · 夜间",
+      "w": 390,
+      "x": 470,
+      "y": 3500
+    },
+    "BrandOffers.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "03 · 优惠 Tab",
+      "w": 390,
+      "x": 2350,
+      "y": 3500
+    },
+    "BrandWithdrawal.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "03 · 出款 Tab",
+      "w": 390,
+      "x": 1410,
+      "y": 3500
+    },
+    "Check.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "02 查询结果 · 黑名单（紧凑默认）",
+      "w": 390,
+      "x": 0,
+      "y": 1900
+    },
+    "CheckCert.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "F2-02 认证",
+      "w": 390,
+      "x": 940,
+      "y": 1900
+    },
+    "CheckFake.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "F2-02 仿冒",
+      "w": 390,
+      "x": 1410,
+      "y": 1900
+    },
+    "CheckNight.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "F2-02 黑名单 · 夜间",
+      "w": 390,
+      "x": 470,
+      "y": 1900
+    },
+    "CheckResult.dc.html": {
+      "h": 1560,
+      "is_interactive": true,
+      "radius": 24,
+      "title": "参考 A · 查询结果第一版（挂起保留）",
+      "w": 390,
+      "x": 940,
+      "y": 10300
+    },
+    "CheckUnknown.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "F2-02 未收录",
+      "w": 390,
+      "x": 2350,
+      "y": 1900
+    },
+    "CheckWatch.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "F2-02 观察",
+      "w": 390,
+      "x": 1880,
+      "y": 1900
+    },
+    "Complaint.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "05 投诉 · 提交表单（类型可点）",
+      "w": 390,
+      "x": 0,
+      "y": 6700
+    },
+    "ComplaintCase.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "05 投诉 · 公开案件页 #cp_002",
+      "w": 390,
+      "x": 940,
+      "y": 6700
+    },
+    "ComplaintNight.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "05 · 案件页夜间",
+      "w": 390,
+      "x": 1410,
+      "y": 6700
+    },
+    "ComplaintProgress.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "05 投诉 · 我的进度 #cp_005",
+      "w": 390,
+      "x": 470,
+      "y": 6700
+    },
+    "HomeV2.dc.html": {
+      "h": 1290,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "参考 B · 暗夜雷达（挂起保留）",
+      "w": 390,
+      "x": 0,
+      "y": 10300
+    },
+    "HomeV9.dc.html": {
+      "h": 1640,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "01 首页 · 日间（当前版 F2.2）",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "HomeV9Night.dc.html": {
+      "h": 1640,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "01 首页 · 夜间",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "List.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "04 名单页 · 认证（四库/地区可点）",
+      "w": 390,
+      "x": 0,
+      "y": 5100
+    },
+    "ListBlacklist.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "04 · 黑名单",
+      "w": 390,
+      "x": 1880,
+      "y": 5100
+    },
+    "ListLicensed.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "04 · 持牌",
+      "w": 390,
+      "x": 1410,
+      "y": 5100
+    },
+    "ListNight.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "04 名单页 · 夜间",
+      "w": 390,
+      "x": 470,
+      "y": 5100
+    },
+    "ListWatch.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "04 · 非认证",
+      "w": 390,
+      "x": 940,
+      "y": 5100
+    },
+    "Main.dc.html": {
+      "h": 1640,
+      "is_interactive": true,
+      "radius": 24,
+      "title": "参考 A · 首页第一版（挂起保留）",
+      "w": 390,
+      "x": 470,
+      "y": 10300
+    },
+    "Me.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "06 我的（登录态）",
+      "w": 390,
+      "x": 0,
+      "y": 8300
+    },
+    "MeNight.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "06 我的 · 夜间",
+      "w": 390,
+      "x": 470,
+      "y": 8300
+    },
+    "Offers.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "07 优惠 Tab · 真实价值榜（筛选可点）",
+      "w": 390,
+      "x": 1060,
+      "y": 8300
+    },
+    "OffersNight.dc.html": {
+      "h": 1200,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "07 优惠 · 夜间",
+      "w": 390,
+      "x": 1530,
+      "y": 8300
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-23T05:10:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "b1": {
+      "fill": "blue",
+      "text": "结构（dense 标准）\n顶栏：返回 · 品牌名 + 认证章 · 日夜 · 订阅\n01 Trust Index：大表盘 + 91 + 牌照/年限/市场 + 三事实\nTab 栏：概览 · 投诉 27 · 出款 312 · 标识 4 · 优惠 2（墨色胶囊 = 当前）\n02 Tab 内容：三 KPI + 行列表默认 2 条 + 展开\n03 Offer 横条（反色）+ 领码\n行动：对此品牌投诉 · 提交出款凭证\n合规行：联盟披露 · 认证标准 · 运营商认领",
+      "w": 340,
+      "x": 2820,
+      "y": 3500
+    },
+    "b2": {
+      "fill": "green",
+      "text": "数据来源\n01 → Brand / License / ScoreSnapshot / BrandAttribute.markets / certifiedDepositUsdt\n概览 → ScoreSnapshot.factors[]\n投诉 → Complaint by brand（publicSummary=true）\n出款 → WithdrawalReport 分布 + kind=official 抽检\n标识 → Identifier by brand（ownership）\n优惠 → Offer.trueValue / PromoCode.claimedCount\n横条 → Offer + PromoCode.code",
+      "w": 340,
+      "x": 2820,
+      "y": 3880
+    },
+    "b3": {
+      "fill": "gray",
+      "text": "已裁定：Tab 五项定稿 · 投诉 Tab 仅 publicSummary · 周返水已补入 fixtures",
+      "w": 340,
+      "x": 2820,
+      "y": 4220
+    },
+    "c1": {
+      "fill": "blue",
+      "text": "三态结构（dense 标准）\n公用：顶栏（标题 + 副题 + 状态徽标）· 五节点步骤条（提交/初筛/受理/答辩/结果，进度线按态填色）\n表单：01 对象（库内品牌 + 绑定状态 + 不享赔付提示）· 02 事实（类型 chips 可点 · 金额 · 日期 · 经过 500 字）· 03 证据（三格，上传即哈希）· 提交\n进度：01 状态（待答辩章 + 倒计时 / 金额 / 通知次数）· 02 记录（默认 2 条）· 03 证据 · TG 推送 / 撤回\n案件页：01 结论（已曝光章 + 标题 + 三事实 + 品牌行）· 02 双方陈述（运营商未答辩显示占位）· 03 判定过程 · 我也遇到 / 分享 / 答辩入口",
+      "w": 340,
+      "x": 1880,
+      "y": 6700
+    },
+    "c2": {
+      "fill": "green",
+      "text": "数据来源\n对象 → Brand / ScoreSnapshot / UserBrandBinding.verificationLevel\n事实 → Complaint.category / amountUsdt / eventDate / description\n证据 → Evidence.sha256 / redacted\n步骤条 → Complaint.status（§9.2 状态机）\n倒计时 → Complaint.replyDeadline · 通知次数 → operatorNotifiedAt / secondNoticeAt\n陈述 → Complaint.description / OperatorReply\n案件页 → Complaint(publicSummary=true) + Exposure + EntityLink",
+      "w": 340,
+      "x": 1880,
+      "y": 7200
+    },
+    "c3": {
+      "fill": "gray",
+      "text": "已裁定：投诉类型五项 · 未绑定可投诉并提示不享赔付 · 未答辩显示占位",
+      "w": 340,
+      "x": 1880,
+      "y": 7560
+    },
+    "g1": {
+      "fill": "blue",
+      "text": "看图指南\n· 本画板是唯一的设计稿观看处；本地 hifi/ 里的 .dc.html 是源码归档，双击打不开。\n· 每排一个页面：01 首页 · 02 查询结果五态 · 03 品牌页五 Tab · 04 名单页四库 · 05 投诉三态 · 06 我的 · 07 优惠；每排含夜间板\n· Play 模式下：日夜可切、Tab / 筛选 / 展开可点、跨页链接可跳\n· 最底排：挂起保留的参考版 A / B\n· 设计标准：docs/design/design-system.md（含 §11 八技法，dense 默认）",
+      "w": 340,
+      "x": 940,
+      "y": 0
+    },
+    "g2": {
+      "fill": "green",
+      "text": "01 首页 · 数据来源\n主表盘/小表盘 → ScoreSnapshot + Brand.status + License\nKPI → Brand / Complaint 聚合\n预警条 → Identifier.ownership=fake\n四库 → Brand.status × License\n保证金 → Σ certifiedDepositUsdt · 热查 → Candidate\n我的 → UserBrandBinding / Complaint\nLog → Exposure / StatusHistory / Complaint",
+      "w": 340,
+      "x": 940,
+      "y": 330
+    },
+    "l1": {
+      "fill": "blue",
+      "text": "结构（dense 标准）\n顶栏：返回 · 名单 + 副题 · 日夜 · 搜索\n四库切换：认证 81 / 非认证 986 / 持牌 312 / 黑名单 217（墨色胶囊 = 当前）\n筛选行：地区 chips（全部/MY/SG/PH/TH/VN/TW/HK，横滑）+ 排序\n01 列表：三 KPI + 行（序号 · 小表盘 · 名称+元信息 · 副行 · 评分 · 状态标签），默认 4 行 + 展开\n黑名单行：表盘只剩红区、指针压 0、评分 —、实底红标\n说明条：该库规则一句话\n点行 → 品牌页",
+      "w": 340,
+      "x": 2350,
+      "y": 5100
+    },
+    "l2": {
+      "fill": "green",
+      "text": "数据来源\n四库计数 → Brand.status × License.valid\n行 → Brand / License / ScoreSnapshot(score, confidence) / BrandAttribute.markets / Exposure（曝光中）\nKPI → 聚合 + Σ certifiedDepositUsdt\n地区筛选 → Brand.markets\n排序 → scoring 排序规则（ADR-0006，不受商业影响）",
+      "w": 340,
+      "x": 2350,
+      "y": 5520
+    },
+    "l3": {
+      "fill": "gray",
+      "text": "已裁定：持牌为跨库筛选视图 · 评分降序 / 黑名单按列入时间 · 7 市场",
+      "w": 340,
+      "x": 2350,
+      "y": 5820
+    },
+    "m1": {
+      "fill": "blue",
+      "text": "06 我的（登录态）\n01 身份：等级环（Lv3 2,450 分）+ 赔付资格 ✓ + 积分来源\n02 四格：绑定 / 投诉 / 领过的码 / 订阅\n03 我的绑定：小表盘 + 账号 + 核验等级 + 赔付标签；一句资格规则\n04 我的动态：投诉 · 码 · 订阅 合并列表，默认 2 条\n05 官方渠道验证（反色）：官方域名 / TG / Bot，「不会私聊、不索要充值」\n06 设置：语言 · 通知 · 负责任博彩（自我排除）· 隐私与数据（删除请求）\n\n07 优惠 Tab\n筛选：全部 / 仅认证 / 正期望 / 体育 / 真人 / 老虎机\n三 KPI：正期望 / 流水补贴型 / 已领码\n每条：品牌 + 标题 + 条款 + 状态 + 领码；真实价值双向条（左红负 / 右绿正）+ 一句结论；非认证显示 ⚠ 风险标签\n按期望净值排序，默认 3 条",
+      "w": 340,
+      "x": 2000,
+      "y": 8300
+    },
+    "m2": {
+      "fill": "green",
+      "text": "数据来源\n我的 → User(level, points) / Identity / UserBrandBinding(verificationLevel, compensationEligible) / Complaint by user / PromoCode claimed / Subscription / Notification\n官方验证 → 架构 §14 官方渠道验证页\n优惠 → Offer(terms, trueValue.netExpectedValueUsdt, verdictText, exclusive, sponsored) / Brand.status / PromoCode.claimedCount",
+      "w": 340,
+      "x": 2000,
+      "y": 8880
+    },
+    "m3": {
+      "fill": "orange",
+      "text": "已裁定（2026-09-23）\n1. 积分 P1 上线，规则可配\n2. 优惠榜负值优惠照常展示，标「流水补贴型」\n3. 正式名 BYDP「博弈点评」；域名 / TG 账号沿用 bydp 前缀待注册\n\nP1 七页全部完成。收尾：field-mapping.md + api-contract.yaml → 高保真冻结 → 计划 v3 第 5 步",
+      "w": 340,
+      "x": 2000,
+      "y": 9200
+    },
+    "q1": {
+      "fill": "blue",
+      "text": "结构（五态共用，dense 默认）\n01 Verdict：表盘指针落评分 + 状态标签盖章 + 一句判定 + 三事实（摘要段已删）\n02 按态：关联同伙 / 五因子 / 官方标识 / 风险信号 — 默认 2 条 + 展开\n03 Timeline：默认 2 条 + 展开，说明单行截断\n04 行动 + 折叠建议\n05 同类可信（认证态不显示）\nTweaks 关闭 dense 可看完整版",
+      "w": 340,
+      "x": 2820,
+      "y": 1900
+    },
+    "q2": {
+      "fill": "green",
+      "text": "数据来源\n01 → Brand.status / Identifier.ownership / ScoreSnapshot / StatusHistory / Exposure / License\n02 → EntityLink · ScoreSnapshot.factors · Identifier(official) · Candidate.riskSignals\n03 → Complaint / OperatorReply / StatusHistory\n05 → scoring 排序（ADR-0006）",
+      "w": 340,
+      "x": 2820,
+      "y": 2300
+    },
+    "q3": {
+      "fill": "gray",
+      "text": "已裁定：五句判定用语定稿 · 未收录态显示 Agent 信号（标待人工确认）· 认证态不放同类推荐",
+      "w": 340,
+      "x": 2820,
+      "y": 2650
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 1400,
+      "text": "参考版（挂起保留，不再迭代）",
+      "w": 240,
+      "x": 0,
+      "y": 10000
+    },
+    "tb": {
+      "kind": "title1",
+      "maxW": 2700,
+      "text": "03 品牌页 · 金龙娱乐城（Brand.dc.html 单组件，tab 枚举，Play 模式可切）",
+      "w": 240,
+      "x": 0,
+      "y": 3200
+    },
+    "tc": {
+      "kind": "title1",
+      "maxW": 2700,
+      "text": "05 投诉流程 · 提交 → 进度 → 公开案件（Complaint.dc.html 单组件，step 枚举）",
+      "w": 240,
+      "x": 0,
+      "y": 6400
+    },
+    "tf": {
+      "kind": "title1",
+      "maxW": 1400,
+      "text": "BYDP「博弈点评」P1 · 当前版（F2.2 精密仪器）— 01 首页",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "tl": {
+      "kind": "title1",
+      "maxW": 2700,
+      "text": "04 名单页 · 四库（List.dc.html 单组件，lib 枚举 + 地区筛选，Play 可切）",
+      "w": 240,
+      "x": 0,
+      "y": 4800
+    },
+    "tm": {
+      "kind": "title1",
+      "maxW": 2700,
+      "text": "06 我的 · 07 优惠 Tab（Me.dc.html / Offers.dc.html）",
+      "w": 240,
+      "x": 0,
+      "y": 8000
+    },
+    "tq": {
+      "kind": "title1",
+      "maxW": 2700,
+      "text": "02 查询结果 · 五态（Check.dc.html 单组件，state 枚举）",
+      "w": 240,
+      "x": 0,
+      "y": 1600
+    }
+  },
+  "order": [
+    "HomeV9.dc.html",
+    "HomeV9Night.dc.html",
+    "Check.dc.html",
+    "CheckNight.dc.html",
+    "CheckCert.dc.html",
+    "CheckFake.dc.html",
+    "CheckWatch.dc.html",
+    "CheckUnknown.dc.html",
+    "Brand.dc.html",
+    "BrandNight.dc.html",
+    "BrandComplaints.dc.html",
+    "BrandWithdrawal.dc.html",
+    "BrandDomains.dc.html",
+    "BrandOffers.dc.html",
+    "List.dc.html",
+    "ListNight.dc.html",
+    "ListWatch.dc.html",
+    "ListLicensed.dc.html",
+    "ListBlacklist.dc.html",
+    "Complaint.dc.html",
+    "ComplaintProgress.dc.html",
+    "ComplaintCase.dc.html",
+    "ComplaintNight.dc.html",
+    "Me.dc.html",
+    "MeNight.dc.html",
+    "Offers.dc.html",
+    "OffersNight.dc.html",
+    "HomeV2.dc.html",
+    "Main.dc.html",
+    "CheckResult.dc.html"
+  ],
+  "pages": [],
+  "title": "BYDP 博弈点评 · 高保真设计稿 P1"
+}

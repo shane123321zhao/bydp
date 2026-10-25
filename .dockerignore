@@ -1,0 +1,16 @@
+# 构建上下文排除：依赖 / 构建产物 / 任何密钥与本地环境文件 / 协作文件
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/*.tsbuildinfo
+.git
+# 任意层级的 .env*（子目录如 apps/web/.env.local 也要排除；只留示例）
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+mailbox
+_to_delete
+Claude outputs
+docs/design/hifi

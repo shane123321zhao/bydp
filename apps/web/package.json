@@ -1,0 +1,30 @@
+{
+  "name": "@bydp/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100",
+    "lint": "eslint . && node scripts/check-web-tokens.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@bydp/core": "workspace:*",
+    "@fontsource/space-grotesk": "^5.2.0",
+    "bullmq": "5.81.5",
+    "ioredis": "5.11.1",
+    "next": "^16.3.0",
+    "next-auth": "5.0.0-beta.32",
+    "next-intl": "^4.14.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
+  }
+}

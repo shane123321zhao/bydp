@@ -1,0 +1,38 @@
+{
+  "name": "bydp",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "db:generate": "pnpm --filter @bydp/db generate",
+    "db:migrate": "pnpm --filter @bydp/db migrate",
+    "db:seed": "pnpm --filter @bydp/db seed",
+    "db:seed:check": "pnpm --filter @bydp/db seed:check",
+    "deps:check": "depcruise --config .dependency-cruiser.cjs packages apps",
+    "ci": "bash scripts/ci.sh",
+    "db:seed:demo": "pnpm --filter @bydp/db seed:demo",
+    "demo:recompute": "pnpm --filter @bydp/worker demo:recompute",
+    "db:seed:prod": "pnpm --filter @bydp/db seed:prod",
+    "db:import:brands": "pnpm --filter @bydp/worker import:brands",
+    "db:brand-template": "pnpm --filter @bydp/worker brand-template",
+    "demo:verify": "pnpm --filter @bydp/worker demo:verify"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "^22.10.0",
+    "dependency-cruiser": "^17.0.0",
+    "eslint": "^9.39.0",
+    "globals": "^17.0.0",
+    "turbo": "^2.5.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.0"
+  }
+}

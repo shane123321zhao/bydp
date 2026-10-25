@@ -1,0 +1,31 @@
+# 测试站（bootstrap 默认）：全站 noindex + Cookie 门禁（无 Cloudflare Access 时的替代，审核 D-009 #1）
+# W2#010：原 Basic Auth 下 React 偶发 #418（本地 9/600，无认证 0/900），改为口令页 + Cookie。
+# - 不带 bydp_gate=<STAGING_GATE_TOKEN> 的请求一律改写到 api 内网口令页（401，不含站点内容）；POST /__gate 交 api 校验口令并下发 Cookie。
+# - 在站点块中位于 /tg/webhook、/v1/postback/* 两条例外之后导入：例外路径不受门禁（与原 Basic Auth 相同）。
+# - 口令与 Cookie 值只在 .env.prod（bootstrap 生成，Cookie 值为十六进制，可直接放进正则）。
+(env_headers) {
+	header X-Robots-Tag "noindex, nofollow"
+}
+(env_gate) {
+	@gate_submit {
+		path /__gate
+		method POST
+	}
+	handle @gate_submit {
+		rewrite * /internal/gate?
+		reverse_proxy api:8787 {
+			header_up CF-Connecting-IP {client_ip}
+		}
+	}
+	# 变量缺失时默认值为空字符类 [^\s\S]（永不匹配）→ 一律显示口令页（失败即关；空值会让「bydp_gate=」放行）
+	@gate_missing not header_regexp Cookie `(?:^|;\s*)bydp_gate={$STAGING_GATE_TOKEN:[^\s\S]}(?:;|$)`
+	handle @gate_missing {
+		rewrite * /internal/gate?
+		reverse_proxy api:8787 {
+			method GET
+			header_up CF-Connecting-IP {client_ip}
+			header_up X-Bydp-Gate-Next {http.request.orig_uri}
+			header_up -Cookie
+		}
+	}
+}

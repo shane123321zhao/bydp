@@ -1,0 +1,159 @@
+# BYDP 测试 / 正式环境编排（D-009）。用法见 deploy/README.md；变量来自同目录 .env.prod（600，不入库）。
+# 运行期不经 pnpm / corepack（以 node 用户运行时 corepack 会重新下载 pnpm，启动卡住）：各服务直接调用本包 node_modules/.bin。
+# 数据库：迁移与 seed 用 owner（bydp_owner）；web / api / worker 一律以 bydp_app 连接（ADR-0006）；scoring 用 bydp_scoring_ro。
+name: bydp
+x-app: &app
+  image: bydp-app:${BYDP_ENV:-staging}
+  env_file: .env.prod
+  restart: unless-stopped
+  environment: &app-env
+    NODE_ENV: production
+    TZ: UTC
+    DATABASE_URL: postgres://bydp_app:${DB_APP_PASSWORD}@postgres:5432/bydp
+    DATABASE_URL_SCORING_RO: postgres://bydp_scoring_ro:${DB_SCORING_RO_PASSWORD}@postgres:5432/bydp
+    REDIS_URL: redis://redis:6379
+    # D-019：中文搜索（仅内网）。查询侧只拿只读搜索 key（MEILI_SEARCH_KEY，bootstrap 派生）；master key 只给 worker（此处置空覆盖 env_file）。
+    # Meili 不可用时查询自动降级 Postgres
+    MEILI_URL: http://meilisearch:7700
+    MEILI_MASTER_KEY: ""
+    # D-020 #3：后台独立子域（正式环境填，如 admin.northx.vip；测试站留空 = 维持 /admin 路径 + Cookie 门禁）
+    ADMIN_HOST: ${ADMIN_HOST:-}
+  depends_on:
+    migrate: { condition: service_completed_successfully }
+    redis: { condition: service_healthy }
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bydp_owner
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: bydp
+      TZ: UTC
+      PGTZ: UTC
+    command: ["postgres", "-c", "timezone=UTC"]
+    volumes: [pg:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U bydp_owner -d bydp"], interval: 5s, timeout: 3s, retries: 30 }
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis:/data]
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 5s, timeout: 3s, retries: 30 }
+
+  # D-019：Meilisearch（不映射端口，只在 compose 内网可达；生产模式要求 master key；不上报统计）
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    restart: unless-stopped
+    environment:
+      MEILI_ENV: production
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_MAX_INDEXING_MEMORY: 256Mb
+    volumes: [meili:/meili_data]
+    healthcheck: { test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:7700/health"], interval: 5s, timeout: 3s, retries: 30 }
+
+  # 一次性：迁移（owner）。角色密码与 seed 由 bootstrap.sh 在迁移后执行
+  migrate:
+    image: bydp-app:${BYDP_ENV:-staging}
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BYDP_ENV: "${BYDP_ENV:-staging}", NEXT_PUBLIC_SITE_URL: "${AUTH_URL:?AUTH_URL 未生成：先跑 bootstrap 第 4 步}" } }
+    env_file: .env.prod
+    environment:
+      DATABASE_URL: postgres://bydp_owner:${POSTGRES_PASSWORD}@postgres:5432/bydp
+    working_dir: /app/packages/db
+    command: ["./node_modules/.bin/drizzle-kit", "migrate"]
+    restart: "no"
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  # 健康检查打登录路由：部署必需配置（AUTH_URL / REDIS_URL / BYDP_TRUST_PROXY）缺失时 auth 模块加载即失败 → 不健康
+  web:
+    <<: *app
+    working_dir: /app/apps/web
+    command: ["./node_modules/.bin/next", "start", "-p", "3100"]
+    healthcheck: { test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3100/api/auth/providers').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"], interval: 15s, timeout: 5s, retries: 10 }
+
+  # D-020 #3：后台子域的登录实例（同一镜像跑 web，BYDP_AUTH_SCOPE=admin：只提供 /login 与 /api/auth/*，其余 404；
+  # cookie 为 __Host-bydp-admin.*，仅后台主机）。只在 ADMIN_HOST 已配置时由 bootstrap 以 profile admin-host 启动。
+  # Telegram 登录组件一个 Bot 只能绑一个域名：后台若要 TG 登录需另建 Bot（ADMIN_TELEGRAM_BOT_*），未配则仅邮箱登录
+  auth-admin:
+    <<: *app
+    profiles: ["admin-host"]
+    environment:
+      <<: *app-env
+      AUTH_URL: https://${ADMIN_HOST:-admin.invalid}
+      BYDP_AUTH_SCOPE: admin
+      TELEGRAM_BOT_TOKEN: ${ADMIN_TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_BOT_USERNAME: ${ADMIN_TELEGRAM_BOT_USERNAME:-}
+      MEILI_SEARCH_KEY: ""
+    working_dir: /app/apps/web
+    command: ["./node_modules/.bin/next", "start", "-p", "3100"]
+    healthcheck: { test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3100/api/auth/providers').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"], interval: 15s, timeout: 5s, retries: 10 }
+
+  # 运营后台（basePath /admin，Caddy 按路径转发）：只调用 api /admin/v1，不连数据库
+  # 最小权限：不继承 .env.prod 与数据库 / Redis 连接串（不读任何密钥；会话 cookie 原样转给 api 校验）
+  admin:
+    image: bydp-app:${BYDP_ENV:-staging}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      TZ: UTC
+      ADMIN_API_URL: http://api:8787
+      ADMIN_HOST: ${ADMIN_HOST:-}
+    depends_on:
+      api: { condition: service_started }
+    working_dir: /app/apps/admin
+    command: ["./node_modules/.bin/next", "start", "-p", "3200"]
+    healthcheck: { test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3200/admin').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"], interval: 15s, timeout: 5s, retries: 10 }
+
+  api:
+    <<: *app
+    environment:
+      <<: *app-env
+      PORT: "8787"
+      SITE_URL: ${AUTH_URL}
+    working_dir: /app/apps/api
+    command: ["./node_modules/.bin/tsx", "src/server.ts"]
+    healthcheck: { test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/v1/openapi.json').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"], interval: 15s, timeout: 5s, retries: 10 }
+
+  worker:
+    <<: *app
+    environment:
+      <<: *app-env
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+      # A-017：Agent 任务（采集 / 站点监控 / 初筛 / 本地化）只经此连接；补推、清理等仍用 bydp_app
+      DATABASE_URL_AGENT: postgres://bydp_agent:${DB_AGENT_PASSWORD}@postgres:5432/bydp
+    working_dir: /app/apps/worker
+    command: ["./node_modules/.bin/tsx", "src/index.ts"]
+
+  # D-017：Telegram Bot（webhook 模式，Caddy /tg/webhook → 3300，secret token 鉴别）；只以 bydp_app 连接
+  tg-bot:
+    <<: *app
+    environment:
+      <<: *app-env
+      PORT: "3300"
+      TG_WEBHOOK_URL: ${AUTH_URL}/tg/webhook
+    working_dir: /app/apps/tg-bot
+    command: ["./node_modules/.bin/tsx", "src/index.ts"]
+    healthcheck: { test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3300/healthz').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"], interval: 15s, timeout: 5s, retries: 10 }
+
+  caddy:
+    # 锁小版本（client_ip_headers 需 ≥ 2.7）；只绑 IPv4：Docker 未开 IPv6 时 [::]:443 由 docker-proxy 经 INPUT 链转入，
+    # 绕过 DOCKER-USER 的 Cloudflare 限制（自检 I1），故不监听 IPv6
+    image: caddy:2.11
+    restart: unless-stopped
+    ports: ["0.0.0.0:80:80", "0.0.0.0:443:443"]
+    env_file: .env.prod
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./admin-host.caddy:/etc/caddy/admin-host.caddy:ro
+      - ./site-mode.caddy:/etc/caddy/site-mode.caddy:ro
+      - ./aop.caddy:/etc/caddy/aop.caddy:ro
+      - ./aop-ca.pem:/etc/caddy/aop-ca.pem:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [web, admin, api]
+
+volumes: { pg: {}, redis: {}, meili: {}, caddy_data: {}, caddy_config: {} }

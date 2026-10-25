@@ -1,0 +1,32 @@
+/*
+ * BYDP design tokens — 方向 R「暗夜雷达」（design-system §13，PO 2026-09-25 暂定主执行版）
+ * 来源：docs/design/prototype/bydp-prototype-radar.html 第 10–18 行原样迁入（D-001 补充）；
+ *   2026-09-26 按 PO 裁定 #10 同步协调官修正后的原型（D-002），只改了 8 个循环引用 / 空值变量。
+ * 主题 = <html data-accent="green|blue|gold" data-bg="night|dusk|day">；默认 green × night（:root 即默认组）。
+ * 规则：token 只允许定义在本文件；apps/web 组件一律 var(--*)；新增 token 须补齐 3 底色 × 3 色系。
+ * 修正记录（D-002，改前 → 改后）：
+ *   night --gb    var(--track)  → rgba(255,255,255,.08)   --gb2   var(--track2) → rgba(255,255,255,.14)
+ *         --well  var(--well)   → rgba(0,0,0,.35)         --track var(--track)  → rgba(255,255,255,.08)
+ *         --track2 var(--track2)→ rgba(255,255,255,.15)   --navBg var(--navBg)  → rgba(20,24,30,.86)
+ *   dusk  --track （未定义，继承空）→ rgba(255,255,255,.10)   --track2（同）→ rgba(255,255,255,.18)
+ * 2026-09-27（D-004 / design-system §14）同步原型：新增 --redSolid（黑名单实底徽章底色，白字 ≥ 4.5:1）、调整 --dim（对比度）。
+ */
+:root{--bg:#07090C;--stage:#02030A;--glass:rgba(255,255,255,.045);--glass2:rgba(255,255,255,.075);--gb:rgba(255,255,255,.08);--gb2:rgba(255,255,255,.14);--well:rgba(0,0,0,.35);--track:rgba(255,255,255,.08);--track2:rgba(255,255,255,.15);--navBg:rgba(20,24,30,.86);--ink:#F2F5F7;--body:#C9D1D9;--muted:#8A94A0;--dim:#7A8490;--red:#FF4D5E;--redSolid:#C8202F;--amber:#FFB020;--green:#3DDC84;--purple:#A78BFA;--blue:#4CC9F0;--shadow:rgba(0,0,0,.6);
+ --accent:#C6FF4A;--accentRGB:198,255,74;--onAccent:#07090C;--accentDim:rgba(var(--accentRGB),.16)}
+:root[data-accent=blue]{--accent:#5AD8FF;--accentRGB:90,216,255;--onAccent:#06121A}
+:root[data-accent=gold]{--accent:#F2CF6B;--accentRGB:242,207,107;--onAccent:#1A1405}
+:root[data-bg=dusk]{--bg:#161B23;--stage:#0B0E14;--glass:rgba(255,255,255,.06);--glass2:rgba(255,255,255,.09);--gb:rgba(255,255,255,.10);--gb2:rgba(255,255,255,.16);--well:rgba(0,0,0,.28);--track:rgba(255,255,255,.10);--track2:rgba(255,255,255,.18);--navBg:rgba(30,36,46,.88);--body:#D3D9E1;--muted:#98A2AE;--dim:#8A94A0}
+:root[data-bg=day]{--bg:#F3F5F8;--stage:#E3E7ED;--glass:rgba(255,255,255,.72);--glass2:rgba(255,255,255,.9);--gb:rgba(10,14,20,.08);--gb2:rgba(10,14,20,.14);--well:rgba(10,14,20,.045);--track:rgba(10,14,20,.08);--track2:rgba(10,14,20,.15);--navBg:rgba(255,255,255,.88);--ink:#0E1116;--body:#3A4250;--muted:#6B7480;--dim:#6B7480;--red:#E5484D;--redSolid:#B3261E;--amber:#D98A00;--green:#17A55D;--purple:#7C5CFF;--blue:#0E8FBF;--shadow:rgba(20,30,50,.18)}
+:root[data-bg=day][data-accent=green]{--accent:#5C9E00;--accentRGB:92,158,0;--onAccent:#fff}
+:root[data-bg=day][data-accent=blue]{--accent:#0E8FBF;--accentRGB:14,143,191;--onAccent:#fff}
+:root[data-bg=day][data-accent=gold]{--accent:#B8860B;--accentRGB:184,134,11;--onAccent:#fff}
+
+/*
+ * 版式 token（D-003 M1，apps/web 追加；不改上方任何值）：圆角 / 间距 / 阴影 / 动效。
+ * 与底色、色系无关，定义在 :root 一处即对 3 底色 × 3 色系全部 9 组生效（design-system §13「补齐 9 组」）。
+ * 颜色的淡色变体一律用 color-mix(in srgb, var(--x) N%, transparent) 由既有颜色 token 派生，不新增字面色。
+ */
+:root{--r-xs:4px;--r-sm:6px;--r-md:11px;--r-lg:14px;--r-xl:16px;--r-2xl:20px;--r-3xl:22px;--r-pill:999px;
+ --s-1:2px;--s-2:4px;--s-3:6px;--s-4:8px;--s-5:10px;--s-6:12px;--s-7:14px;--s-8:16px;--s-9:18px;--s-10:20px;--s-12:28px;--s-nav:96px;
+ --sh-float:0 12px 40px var(--shadow);--sh-logo:0 8px 24px var(--well);--glow-xs:8px;--glow-sm:10px;--glow-md:12px;
+ --dur-theme:.35s;--ease-out:cubic-bezier(.2,.8,.2,1)}

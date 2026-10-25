@@ -1,0 +1,901 @@
+{
+  "_schema": "架构 v1.3 §7 信任域。scoreSnapshots.factors[].available=false 表示样本不足不计入；confidence ∈ low|medium|high|none。complaint.status 见 §9.2 状态机。",
+  "scoreSnapshots": [
+    {
+      "brandId": "br_caishen",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": null,
+      "confidence": "none",
+      "factorsAvailable": 1,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "样本不足（0 个绑定，需 ≥ 20）",
+          "metrics": {
+            "sample": 0,
+            "bindings": 0
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": null,
+          "available": false,
+          "sampleSize": 1,
+          "detail": "样本不足（已结案 1，需 ≥ 5）",
+          "metrics": {
+            "sample": 1
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": null,
+          "available": false,
+          "sampleSize": null,
+          "detail": "暂无采集数据",
+          "metrics": {}
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "样本不足（有效 0，需 ≥ 30）",
+          "metrics": {
+            "sample": 0,
+            "effectiveSample": 0
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": null,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营年限不明；官方域名在线 1/2",
+          "metrics": {
+            "years": null,
+            "domainOnlineRatio": 0.5,
+            "linkedToBlacklist": 0
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_crown",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": 76,
+      "confidence": "high",
+      "factorsAvailable": 5,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": 89,
+          "available": true,
+          "sampleSize": 140,
+          "detail": "中位到账 2.1 小时；拒付率 2.1%",
+          "metrics": {
+            "medianMinutes": 126,
+            "refusalRate": 0.0214,
+            "sample": 140,
+            "bindings": 47
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": 81,
+          "available": true,
+          "sampleSize": 20,
+          "detail": "解决率 80%；中位响应 2 天；4 件未解决 / 失联",
+          "metrics": {
+            "resolveRate": 0.8,
+            "medianResponseDays": 2,
+            "sample": 20
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": 50,
+          "available": true,
+          "sampleSize": null,
+          "detail": "3 种支付、3 家游戏商、0 项客服",
+          "metrics": {
+            "payments": 3,
+            "providers": 3,
+            "supportChannels": 0,
+            "verifiedRatio": 1
+          }
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": 70,
+          "available": true,
+          "sampleSize": 311,
+          "detail": "可信加权 3.8 / 5",
+          "metrics": {
+            "weightedRating": 3.8,
+            "effectiveSample": 248.8,
+            "sample": 311
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": 85,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营 6 年；官方域名在线 0/0",
+          "metrics": {
+            "years": 6,
+            "domainOnlineRatio": null,
+            "linkedToBlacklist": 0
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_haoyun",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": null,
+      "confidence": "none",
+      "factorsAvailable": 1,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "样本不足（0 个绑定，需 ≥ 20）",
+          "metrics": {
+            "sample": 0,
+            "bindings": 0
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": null,
+          "available": false,
+          "sampleSize": 1,
+          "detail": "样本不足（已结案 1，需 ≥ 5）",
+          "metrics": {
+            "sample": 1
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": null,
+          "available": false,
+          "sampleSize": null,
+          "detail": "暂无采集数据",
+          "metrics": {}
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "样本不足（有效 0，需 ≥ 30）",
+          "metrics": {
+            "sample": 0,
+            "effectiveSample": 0
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": null,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营年限不明；官方域名在线 0/0",
+          "metrics": {
+            "years": null,
+            "domainOnlineRatio": null,
+            "linkedToBlacklist": 0
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_jinlong",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": 92,
+      "confidence": "high",
+      "factorsAvailable": 5,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": 99,
+          "available": true,
+          "sampleSize": 312,
+          "detail": "中位到账 38 分钟；拒付率 0.6%",
+          "metrics": {
+            "medianMinutes": 38,
+            "refusalRate": 0.0064,
+            "sample": 312,
+            "bindings": 105
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": 80,
+          "available": true,
+          "sampleSize": 27,
+          "detail": "解决率 92.6%；中位响应 4 天；2 件未解决 / 失联",
+          "metrics": {
+            "resolveRate": 0.9259,
+            "medianResponseDays": 4,
+            "sample": 27
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": 100,
+          "available": true,
+          "sampleSize": null,
+          "detail": "4 种支付、4 家游戏商、3 项客服",
+          "metrics": {
+            "payments": 4,
+            "providers": 4,
+            "supportChannels": 3,
+            "verifiedRatio": 1
+          }
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": 83,
+          "available": true,
+          "sampleSize": 1204,
+          "detail": "可信加权 4.3 / 5",
+          "metrics": {
+            "weightedRating": 4.3,
+            "effectiveSample": 963.1,
+            "sample": 1204
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": 100,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营 8 年；官方域名在线 2/2",
+          "metrics": {
+            "years": 8,
+            "domainOnlineRatio": 1,
+            "linkedToBlacklist": 0
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_longteng",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": 61,
+      "confidence": "medium",
+      "factorsAvailable": 3,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": 64,
+          "available": true,
+          "sampleSize": 64,
+          "detail": "中位到账 6 小时；拒付率 9.4%",
+          "metrics": {
+            "medianMinutes": 360,
+            "refusalRate": 0.0938,
+            "sample": 64,
+            "bindings": 22
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": 49,
+          "available": true,
+          "sampleSize": 10,
+          "detail": "解决率 70%；中位响应 7 天；3 件未解决 / 失联",
+          "metrics": {
+            "resolveRate": 0.7,
+            "medianResponseDays": 7,
+            "sample": 10
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": null,
+          "available": false,
+          "sampleSize": null,
+          "detail": "暂无采集数据",
+          "metrics": {}
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": null,
+          "available": false,
+          "sampleSize": 18,
+          "detail": "样本不足（有效 9，需 ≥ 30）",
+          "metrics": {
+            "sample": 18,
+            "effectiveSample": 9
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": 85,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营 5 年；官方域名在线 0/0",
+          "metrics": {
+            "years": 5,
+            "domainOnlineRatio": null,
+            "linkedToBlacklist": 0
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_royal",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": 85,
+      "confidence": "medium",
+      "factorsAvailable": 4,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": 92,
+          "available": true,
+          "sampleSize": 180,
+          "detail": "中位到账 55 分钟；拒付率 3.9%",
+          "metrics": {
+            "medianMinutes": 55,
+            "refusalRate": 0.0389,
+            "sample": 180,
+            "bindings": 60
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": 81,
+          "available": true,
+          "sampleSize": 16,
+          "detail": "解决率 87.5%；中位响应 3 天；2 件未解决 / 失联",
+          "metrics": {
+            "resolveRate": 0.875,
+            "medianResponseDays": 3,
+            "sample": 16
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": null,
+          "available": false,
+          "sampleSize": null,
+          "detail": "暂无采集数据",
+          "metrics": {}
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": 75,
+          "available": true,
+          "sampleSize": 420,
+          "detail": "可信加权 4 / 5",
+          "metrics": {
+            "weightedRating": 4,
+            "effectiveSample": 336,
+            "sample": 420
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": 85,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营 7 年；官方域名在线 0/0",
+          "metrics": {
+            "years": 7,
+            "domainOnlineRatio": null,
+            "linkedToBlacklist": 0
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_starlight",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": null,
+      "confidence": "none",
+      "factorsAvailable": 1,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "样本不足（0 个绑定，需 ≥ 20）",
+          "metrics": {
+            "sample": 0,
+            "bindings": 0
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "暂无案件",
+          "metrics": {
+            "sample": 0
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": 6,
+          "available": true,
+          "sampleSize": null,
+          "detail": "1 种支付、0 家游戏商、0 项客服；部分数据未核验",
+          "metrics": {
+            "payments": 1,
+            "providers": 0,
+            "supportChannels": 0,
+            "verifiedRatio": 0
+          }
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": null,
+          "available": false,
+          "sampleSize": 0,
+          "detail": "样本不足（有效 0，需 ≥ 30）",
+          "metrics": {
+            "sample": 0,
+            "effectiveSample": 0
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": null,
+          "available": false,
+          "sampleSize": null,
+          "detail": "收录 < 30 天，观察中",
+          "metrics": {
+            "listedDays": 13
+          }
+        }
+      ]
+    },
+    {
+      "brandId": "br_winner",
+      "algorithmVersion": "v0.4",
+      "computedAt": "2026-09-23T02:00:00Z",
+      "score": 31,
+      "confidence": "medium",
+      "factorsAvailable": 4,
+      "factorsTotal": 5,
+      "factors": [
+        {
+          "key": "withdrawal",
+          "label": "出款表现",
+          "weight": 30,
+          "score": 12,
+          "available": true,
+          "sampleSize": 57,
+          "detail": "中位到账 3.2 天；拒付率 14%",
+          "metrics": {
+            "medianMinutes": 4608,
+            "refusalRate": 0.1404,
+            "sample": 57,
+            "bindings": 20
+          }
+        },
+        {
+          "key": "arbitration",
+          "label": "仲裁履约",
+          "weight": 25,
+          "score": 59,
+          "available": true,
+          "sampleSize": 12,
+          "detail": "解决率 41.7%；中位响应 1 天；7 件未解决 / 失联",
+          "metrics": {
+            "resolveRate": 0.4167,
+            "medianResponseDays": 1,
+            "sample": 12
+          }
+        },
+        {
+          "key": "hardMetrics",
+          "label": "平台硬指标",
+          "weight": 20,
+          "score": 23,
+          "available": true,
+          "sampleSize": null,
+          "detail": "2 种支付、2 家游戏商、0 项客服；部分数据未核验",
+          "metrics": {
+            "payments": 2,
+            "providers": 2,
+            "supportChannels": 0,
+            "verifiedRatio": 0
+          }
+        },
+        {
+          "key": "playerReviews",
+          "label": "玩家评价",
+          "weight": 15,
+          "score": null,
+          "available": false,
+          "sampleSize": 9,
+          "detail": "样本不足（有效 4.9，需 ≥ 30）",
+          "metrics": {
+            "sample": 9,
+            "effectiveSample": 4.9
+          }
+        },
+        {
+          "key": "stability",
+          "label": "经营稳定性",
+          "weight": 10,
+          "score": 30,
+          "available": true,
+          "sampleSize": null,
+          "detail": "运营年限不明；官方域名在线 1/1；与黑名单存在关联",
+          "metrics": {
+            "years": null,
+            "domainOnlineRatio": 1,
+            "linkedToBlacklist": 1
+          }
+        }
+      ]
+    }
+  ],
+  "withdrawalReports": [
+    {
+      "id": "wr_001",
+      "brandId": "br_jinlong",
+      "kind": "user",
+      "amountUsdt": 1200,
+      "method": "USDT-TRC20",
+      "requestedAt": "2026-09-20T14:02:00Z",
+      "receivedAt": "2026-09-20T14:41:00Z",
+      "outcome": "paid",
+      "bindingId": "ubb_001"
+    },
+    {
+      "id": "wr_002",
+      "brandId": "br_jinlong",
+      "kind": "official",
+      "amountUsdt": 500,
+      "method": "DuitNow",
+      "requestedAt": "2026-09-01T09:00:00Z",
+      "receivedAt": "2026-09-01T10:12:00Z",
+      "outcome": "paid",
+      "bindingId": null
+    },
+    {
+      "id": "wr_003",
+      "brandId": "br_winner",
+      "kind": "user",
+      "amountUsdt": 3800,
+      "method": "USDT-TRC20",
+      "requestedAt": "2026-08-14T11:00:00Z",
+      "receivedAt": null,
+      "outcome": "refused",
+      "bindingId": "ubb_002",
+      "complaintId": "cp_002"
+    }
+  ],
+  "complaints": [
+    {
+      "id": "cp_001",
+      "brandId": "br_jinlong",
+      "userId": "u_102",
+      "bindingId": "ubb_001",
+      "category": "delay",
+      "title": "提款 5,000 USDT 超 48 小时未到账",
+      "amountUsdt": 5000,
+      "eventDate": "2026-07-31",
+      "description": "7 月 31 日申请提款 5,000 USDT（TRC20），超过 48 小时仍显示处理中，客服称在审核但未给出时限。",
+      "publicDescription": "7 月 31 日申请提款 5,000 USDT（TRC20），超过 48 小时仍显示处理中，客服称在审核但未给出时限。",
+      "status": "resolved",
+      "createdAt": "2026-08-02T08:15:00Z",
+      "acceptedAt": "2026-08-02T10:00:00Z",
+      "operatorNotifiedAt": "2026-08-02T10:05:00Z",
+      "operatorRepliedAt": "2026-08-03T02:40:00Z",
+      "resolvedAt": "2026-08-04T06:00:00Z",
+      "resolution": "运营商补付并说明为风控复核延迟",
+      "publicSummary": true
+    },
+    {
+      "id": "cp_002",
+      "brandId": "br_winner",
+      "userId": "u_233",
+      "bindingId": "ubb_002",
+      "category": "refused",
+      "title": "赢 3,800 USDT 后被指\"套利\"拒付并冻结账号",
+      "amountUsdt": 3800,
+      "eventDate": "2026-08-14",
+      "description": "8 月 14 日赢得 3,800 USDT 后申请提款，平台以\"套利\"为由拒付并冻结账号，未提供具体违规条款或投注明细。",
+      "publicDescription": "8 月 14 日赢得 3,800 USDT 后申请提款，平台以\"套利\"为由拒付并冻结账号，未提供具体违规条款或投注明细。",
+      "status": "exposed",
+      "createdAt": "2026-08-15T03:20:00Z",
+      "acceptedAt": "2026-08-15T09:00:00Z",
+      "operatorNotifiedAt": "2026-08-15T09:10:00Z",
+      "secondNoticeAt": "2026-08-19T09:00:00Z",
+      "operatorRepliedAt": null,
+      "exposedAt": "2026-08-23T09:00:00Z",
+      "resolution": "答辩期内两次通知无响应，判定失联，转曝光",
+      "publicSummary": true
+    },
+    {
+      "id": "cp_003",
+      "brandId": "br_caishen",
+      "userId": "u_310",
+      "bindingId": null,
+      "category": "closed",
+      "title": "网站关闭、客服失联，余额 2,150 USDT 无法提取",
+      "amountUsdt": 2150,
+      "eventDate": "2026-07-19",
+      "description": "7 月 19 日起网站无法访问，客服 TG 不再回复，账户余额 2,150 USDT 无法提取。",
+      "publicDescription": "7 月 19 日起网站无法访问，客服 TG 不再回复，账户余额 2,150 USDT 无法提取。",
+      "status": "exposed",
+      "createdAt": "2026-07-20T15:00:00Z",
+      "acceptedAt": "2026-07-21T02:00:00Z",
+      "exposedAt": "2026-07-28T02:00:00Z",
+      "resolution": "同期 17 起同类投诉；域名下线；判定跑路，列入黑名单",
+      "publicSummary": true,
+      "relatedComplaintCount": 17
+    },
+    {
+      "id": "cp_004",
+      "brandId": "br_crown",
+      "userId": "u_412",
+      "bindingId": "ubb_004",
+      "category": "bonus",
+      "title": "首存优惠流水已达标仍不允许提款",
+      "amountUsdt": 860,
+      "eventDate": "2026-09-17",
+      "description": "首存优惠流水已按页面显示达标，申请提款被拒，客服称部分投注不计入流水但未事先告知受限游戏范围。",
+      "status": "arbitrating",
+      "createdAt": "2026-09-18T12:00:00Z",
+      "acceptedAt": "2026-09-18T14:00:00Z",
+      "operatorNotifiedAt": "2026-09-18T14:05:00Z",
+      "operatorRepliedAt": "2026-09-20T08:30:00Z",
+      "publicSummary": false
+    },
+    {
+      "id": "cp_005",
+      "brandId": "br_winner",
+      "userId": "u_509",
+      "bindingId": null,
+      "category": "delay",
+      "title": "提款 1,000 USDT 已 6 天未到账",
+      "amountUsdt": 1000,
+      "eventDate": "2026-09-15",
+      "description": "9 月 15 日申请提款 1,000 USDT，至今 6 天未到账，客服多次答复\"排队中\"。",
+      "status": "awaiting_reply",
+      "createdAt": "2026-09-21T06:00:00Z",
+      "acceptedAt": "2026-09-21T09:00:00Z",
+      "operatorNotifiedAt": "2026-09-21T09:05:00Z",
+      "replyDeadline": "2026-09-28T09:05:00Z",
+      "publicSummary": false
+    },
+    {
+      "id": "cp_006",
+      "brandId": "br_haoyun",
+      "userId": "u_102",
+      "bindingId": null,
+      "category": "closed",
+      "title": "网站关闭、客服失联，余额 2,400 USDT 无法提取",
+      "amountUsdt": 2400,
+      "eventDate": "2026-05-24",
+      "description": "5 月 24 日起网站打不开，客服 TG 被注销，账户余额 2,400 USDT 无法提取。",
+      "publicDescription": "5 月 24 日起网站打不开，客服 TG 被注销，账户余额 2,400 USDT 无法提取。",
+      "status": "exposed",
+      "createdAt": "2026-05-25T04:00:00Z",
+      "acceptedAt": "2026-05-25T08:00:00Z",
+      "exposedAt": "2026-06-02T02:00:00Z",
+      "resolution": "关站失联，判定跑路，列入黑名单",
+      "publicSummary": true,
+      "_note": "协调官 D-003 补齐"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_001",
+      "complaintId": "cp_002",
+      "type": "screenshot",
+      "label": "提款申请页截图",
+      "sha256": "3affc6ea681421ce3a373d9e73188e361cb49abc686509b5dbc5ab15443aec6b",
+      "uploadedAt": "2026-08-15T03:22:00Z",
+      "redacted": true
+    },
+    {
+      "id": "ev_002",
+      "complaintId": "cp_002",
+      "type": "chat_log",
+      "label": "客服对话记录（已脱敏）",
+      "sha256": "3269a260e57f03eb3cd87aadb74d8f1c3cee8bc21aee9b4c261a2fac1fdd915e",
+      "uploadedAt": "2026-08-15T03:25:00Z",
+      "redacted": true
+    },
+    {
+      "id": "ev_003",
+      "complaintId": "cp_002",
+      "type": "tx_hash",
+      "label": "入金链上交易",
+      "sha256": "fc35d90e9dd3aa7fe67b635aeefff8dec8586d9b150faf25f1216a5dad06da9a",
+      "uploadedAt": "2026-08-15T03:30:00Z",
+      "redacted": false
+    },
+    {
+      "id": "ev_004",
+      "complaintId": "cp_001",
+      "type": "screenshot",
+      "label": "提款记录页",
+      "sha256": "4d7a938220ac75991b61c1042a89795e0a32421b96ac294b6ffab3f612a345c1",
+      "uploadedAt": "2026-08-02T08:16:00Z",
+      "redacted": true
+    }
+  ],
+  "operatorReplies": [
+    {
+      "id": "or_001",
+      "complaintId": "cp_001",
+      "repliedAt": "2026-08-03T02:40:00Z",
+      "summary": "账户触发大额风控复核，已于 8 月 3 日完成放款",
+      "attachments": 1
+    },
+    {
+      "id": "or_002",
+      "complaintId": "cp_004",
+      "repliedAt": "2026-09-20T08:30:00Z",
+      "summary": "用户投注中 62% 为受限游戏，不计入流水；已提供投注明细",
+      "attachments": 2
+    }
+  ],
+  "exposures": [
+    {
+      "id": "ex_001",
+      "brandId": "br_caishen",
+      "slug": "caishen-poker",
+      "title": "财神棋牌跑路：网站关闭、换域名重开",
+      "publishedAt": "2026-07-28T02:00:00Z",
+      "totalClaimedUsdt": 38400
+    },
+    {
+      "id": "ex_002",
+      "brandId": "br_winner",
+      "slug": "winner-sports",
+      "title": "赢家体育以\"套利\"为由拒付并失联",
+      "publishedAt": "2026-08-23T09:00:00Z",
+      "totalClaimedUsdt": 3800
+    },
+    {
+      "id": "ex_003",
+      "brandId": "br_haoyun",
+      "slug": "haoyun-poker",
+      "title": "好运棋牌关站跑路",
+      "publishedAt": "2026-06-02T02:00:00Z",
+      "totalClaimedUsdt": 21600
+    }
+  ],
+  "statusHistory": [
+    {
+      "brandId": "br_jinlong",
+      "from": "watch",
+      "to": "certified",
+      "at": "2026-06-12T00:00:00Z",
+      "reason": "通过认证标准；保证金 200,000 USDT 到账",
+      "actor": "arbitration_team"
+    },
+    {
+      "brandId": "br_caishen",
+      "from": "watch",
+      "to": "blacklist",
+      "at": "2026-07-28T02:00:00Z",
+      "reason": "跑路；17 起同类投诉；答辩期无响应",
+      "actor": "arbitration_team"
+    },
+    {
+      "brandId": "br_starlight",
+      "from": null,
+      "to": "watch",
+      "at": "2026-09-10T00:00:00Z",
+      "reason": "首次收录",
+      "actor": "agent"
+    }
+  ],
+  "exposureComplaints": [
+    {
+      "exposureId": "ex_001",
+      "complaintId": "cp_003"
+    },
+    {
+      "exposureId": "ex_002",
+      "complaintId": "cp_002"
+    },
+    {
+      "exposureId": "ex_003",
+      "complaintId": "cp_006"
+    }
+  ]
+}

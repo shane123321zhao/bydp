@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>BYDP 投诉流程</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'IBM Plex Sans','Noto Sans SC',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.zh{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.t{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
+.cb{position:absolute;width:7px;height:7px;opacity:.55}
+.cb.tl{left:6px;top:6px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor}
+.cb.tr{right:6px;top:6px;border-right:1.5px solid currentColor;border-top:1.5px solid currentColor}
+.cb.bl{left:6px;bottom:6px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor}
+.cb.br{right:6px;bottom:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.r1{animation:rise .5s ease-out .05s both}.r2{animation:rise .5s ease-out .18s both}.r3{animation:rise .5s ease-out .3s both}.r4{animation:rise .5s ease-out .42s both}.r5{animation:rise .5s ease-out .54s both}
+@keyframes scan{0%{left:-30%}100%{left:100%}}
+.scan{position:absolute;top:0;height:1px;width:30%;animation:scan 3.4s linear infinite}
+@keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bar{transform-origin:left;animation:bar 1.2s cubic-bezier(.2,.8,.2,1) .4s both}
+@keyframes live{0%,100%{opacity:1}50%{opacity:.25}}
+.live{animation:live 1.6s ease-in-out infinite}
+@keyframes stamp{0%{opacity:0;transform:scale(1.4)}70%{opacity:1;transform:scale(.97)}100%{transform:scale(1)}}
+.stamp{animation:stamp .45s cubic-bezier(.2,.9,.2,1) .9s both}
+@keyframes dot{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.dt{animation:dot .35s ease-out both}
+input::placeholder,textarea::placeholder{color:{{c.muted}}}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 1300px; box-sizing: border-box; position: relative; overflow: hidden; background: {{c.bg}}; color: {{c.ink}}; display: flex; flex-direction: column; background-image: radial-gradient({{c.dot}} 1px, transparent 1px); background-size: 18px 18px;">
+
+  <!-- 顶栏 -->
+  <header class="r1 t" style="flex-shrink: 0; height: 48px; padding: 0 12px 0 8px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid {{c.line}}; position: relative; background: {{c.bg}};">
+    <span class="scan" aria-hidden="true" style="background: linear-gradient(90deg, transparent, {{c.accent}}, transparent);"></span>
+    <a href="HomeV9.dc.html" aria-label="返回" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.1;"><span class="zh" style="font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ s.title }}</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">{{ s.sub }}</span></div>
+    <button onClick="{{ toggleTheme }}" aria-label="切换日夜" class="t" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0;">
+      <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></sc-if>
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></sc-if>
+    </button>
+    <span class="mono t" style="height: 28px; padding: 0 8px; border-radius: 8px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.muted}}; font-size: 10px; display: flex; align-items: center; flex-shrink: 0;">{{ s.badge }}</span>
+  </header>
+
+  <!-- 步骤条（表单 / 进度共用：状态机 6 节点） -->
+  <sc-if value="{{ s.showSteps }}" hint-placeholder-val="{{ true }}">
+  <div class="r2 t" style="flex-shrink: 0; margin: 12px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 12px; padding: 10px 12px 8px 12px; position: relative; color: {{c.ink}};">
+    <span class="cb tl"></span><span class="cb br"></span>
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; align-items: start; position: relative;">
+      <div aria-hidden="true" class="t" style="position: absolute; left: 10%; right: 10%; top: 7px; height: 2px; background: {{c.track}};"></div>
+      <div aria-hidden="true" class="bar" style="position: absolute; left: 10%; top: 7px; height: 2px; width: {{ s.progressPct }}; background: {{ s.progressColor }};"></div>
+      <sc-for list="{{ s.steps }}" as="st" hint-placeholder-count="5">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; position: relative;">
+          <span class="t" style="width: 16px; height: 16px; border-radius: 8px; background: {{ st.bg }}; border: 2px solid {{ st.bd }}; display: flex; align-items: center; justify-content: center;"><span class="live" style="width: 6px; height: 6px; border-radius: 3px; background: {{ st.dot }}; display: block; animation-play-state: {{ st.anim }};"></span></span>
+          <span class="zh" style="font-size: 10px; color: {{ st.fg }}; font-weight: {{ st.fw }}; text-align: center; line-height: 1.2;">{{ st.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ FORM ============ -->
+  <sc-if value="{{ isForm }}" hint-placeholder-val="{{ true }}">
+    <!-- 01 对象 -->
+    <section class="r3 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">01 · Target</span><span class="zh" style="font-size: 16px; font-weight: 700;">投诉对象 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 从库中选择</span></span></div>
+      <div class="t" style="display: grid; grid-template-columns: 56px 1fr auto; gap: 8px; align-items: center; border: 1px solid {{c.line}}; border-radius: 10px; padding: 6px 8px;">
+        <svg width="56" height="36" viewBox="0 0 64 40" aria-hidden="true"><path d="M8 32 A24 24 0 0 1 56 32" fill="none" stroke="{{c.track}}" stroke-width="3.5"/><path d="M8 32 A24 24 0 0 1 12.6 17.9" fill="none" stroke="{{c.red}}" stroke-width="3.5"/><path d="M12.6 17.9 A24 24 0 0 1 49 15" fill="none" stroke="{{c.amber}}" stroke-width="3.5"/><path d="M49 15 A24 24 0 0 1 56 32" fill="none" stroke="{{c.green}}" stroke-width="3.5"/><g style="transform-origin: 32px 32px; transform: rotate(-16.2deg); filter: {{c.needleGlow}};"><line x1="32" y1="32" x2="32" y2="13" stroke="{{c.needle}}" stroke-width="1.8" stroke-linecap="round"/></g><circle cx="32" cy="32" r="2.5" fill="{{c.ink}}"/></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;"><span class="zh" style="font-size: 14px; color: {{c.body}};"><span style="font-weight: 600; color: {{c.ink}};">赢家体育</span> winner-sport.co</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">观察 · 评分 41 · 未绑定账号</span></div>
+        <button class="mono t" style="height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid {{c.line}}; background: transparent; color: {{c.accent}}; font-size: 11px; font-family: inherit;">更换</button>
+      </div>
+      <div class="t" style="display: flex; gap: 8px; align-items: flex-start; padding: 6px 8px; border-radius: 8px; border: 1px solid {{c.amber}};"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{{c.amber}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span class="zh" style="font-size: 12px; line-height: 1.5; color: {{c.body}};">该品牌未认证，本案不适用先行赔付；投诉仍会受理、通知运营商并公开处理结果。</span></div>
+    </section>
+
+    <!-- 02 事实 -->
+    <section class="r4 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">02 · Facts</span><span class="zh" style="font-size: 16px; font-weight: 700;">事实 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 类型 · 金额 · 时间</span></span></div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <sc-for list="{{ cats }}" as="ct" hint-placeholder-count="5">
+          <button onClick="{{ ct.pick }}" class="zh t" style="height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid {{ ct.bd }}; background: {{ ct.bg }}; color: {{ ct.fg }}; font-size: 12px; font-weight: {{ ct.fw }}; font-family: inherit; cursor: pointer;">{{ ct.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <label class="t" style="display: flex; flex-direction: column; gap: 3px; border: 1px solid {{c.line}}; border-radius: 10px; padding: 6px 10px;"><span class="mono" style="font-size: 10px; color: {{c.muted}};">涉及金额 USDT</span><input type="text" value="1,000" style="border: none; background: transparent; font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; color: {{c.ink}}; outline: none; padding: 0; min-width: 0;"></label>
+        <label class="t" style="display: flex; flex-direction: column; gap: 3px; border: 1px solid {{c.line}}; border-radius: 10px; padding: 6px 10px;"><span class="mono" style="font-size: 10px; color: {{c.muted}};">事件日期</span><input type="text" value="2026-09-15" style="border: none; background: transparent; font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; color: {{c.ink}}; outline: none; padding: 0; min-width: 0;"></label>
+      </div>
+      <label class="t" style="display: flex; flex-direction: column; gap: 3px; border: 1px solid {{c.line}}; border-radius: 10px; padding: 6px 10px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; display: flex; justify-content: space-between;"><span>经过（不含个人信息）</span><span>86 / 500</span></span><textarea rows="3" style="border: none; background: transparent; font-family: inherit; font-size: 13px; line-height: 1.5; color: {{c.body}}; outline: none; padding: 0; resize: none;">9 月 15 日申请提款 1,000 U，客服称审核中，至今 6 天未到账，两次催问无进一步回复。账号可正常登录，余额显示已扣。</textarea></label>
+    </section>
+
+    <!-- 03 证据 -->
+    <section class="r5 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; align-items: baseline; justify-content: space-between;"><div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">03 · Evidence</span><span class="zh" style="font-size: 16px; font-weight: 700;">证据 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 上传即哈希存档</span></span></div><a href="#" class="mono" style="font-size: 10px; color: {{c.accent}};">证据标准 ↗</a></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+        <div class="t" style="border: 1px solid {{c.green}}; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 3px; min-height: 64px;"><span class="mono" style="font-size: 10px; color: {{c.green}};">✓ 提款页截图</span><span class="mono" style="font-size: 10px; color: {{c.muted}}; word-break: break-all;">sha256 3f9a…c21e</span></div>
+        <div class="t" style="border: 1px solid {{c.green}}; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 3px; min-height: 64px;"><span class="mono" style="font-size: 10px; color: {{c.green}};">✓ 客服对话</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">已脱敏 · b71d…08aa</span></div>
+        <button class="t" style="border: 1px dashed {{c.line}}; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 64px; background: transparent; color: {{c.muted}}; font-family: inherit; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="mono" style="font-size: 10px;">交易哈希</span></button>
+      </div>
+      <span class="mono" style="font-size: 10px; color: {{c.muted}}; line-height: 1.5;">原文可随时申请脱敏 / 删除；哈希与状态日志永久保留（只追加）。</span>
+    </section>
+
+    <!-- 提交 -->
+    <section class="r5" style="flex-shrink: 0; margin: 8px 16px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+      <a href="ComplaintProgress.dc.html" class="t" style="height: 44px; border-radius: 11px; background: {{c.ink}}; color: {{c.bg}}; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">提交投诉 · 进入初筛<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg></a>
+      <span class="zh" style="font-size: 11px; color: {{c.muted}}; line-height: 1.5; text-align: center;">提交后 Agent + 人工初筛；受理即通知运营商，答辩期 7 天；处理结果公开摘要。</span>
+    </section>
+  </sc-if>
+
+  <!-- ============ PROGRESS ============ -->
+  <sc-if value="{{ isProgress }}" hint-placeholder-val="{{ false }}">
+    <section class="r3 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
+      <div style="display: flex; align-items: baseline; justify-content: space-between;"><div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">01 · Status</span><span class="zh" style="font-size: 16px; font-weight: 700;">当前状态 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— #cp_005 · 赢家体育</span></span></div><span class="mono stamp" style="font-size: 11px; font-weight: 600; letter-spacing: .1em; color: {{c.amber}}; border: 1.5px solid {{c.amber}}; padding: 2px 7px; border-radius: 4px;">待答辩</span></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1; color: {{c.amber}};">4 天 18 时</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">答辩截止 09-28</span></div>
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1;">1,000 U</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">涉及金额</span></div>
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1;">1 / 2</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">通知次数</span></div>
+      </div>
+      <span class="zh" style="font-size: 12px; line-height: 1.55; color: {{c.body}};">已于 09-21 通知运营商（认领邮箱 + TG）。若 09-28 前无响应将二次通知；两次无响应判定失联并转曝光。</span>
+    </section>
+
+    <section class="r4 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px 10px 12px; display: flex; flex-direction: column; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 8px;"><div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">02 · Timeline</span><span class="zh" style="font-size: 16px; font-weight: 700;">处理记录 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 只追加 · 可审计</span></span></div></div>
+      <div style="display: flex; flex-direction: column; position: relative; padding-left: 14px;">
+        <span aria-hidden="true" style="position: absolute; left: 4px; top: 6px; bottom: 6px; width: 1px; background: {{c.line}};"></span>
+        <sc-for list="{{ tlShown }}" as="e" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: 44px 1fr; gap: 8px; align-items: start; padding: 5px 0; position: relative;">
+            <span class="dt" aria-hidden="true" style="position: absolute; left: -13px; top: 10px; width: 7px; height: 7px; border-radius: 4px; background: {{ e.dot }}; animation-delay: {{ e.delay }};"></span>
+            <span class="mono" style="font-size: 10px; color: {{c.muted}}; padding-top: 2px;">{{ e.date }}</span>
+            <span class="zh" style="font-size: 13px; line-height: 1.5; color: {{c.body}}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span style="font-weight: 600; color: {{ e.subjColor }};">{{ e.subj }}</span> {{ e.rest }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ moreTl }}" hint-placeholder-val="{{ true }}"><button onClick="{{ toggleTl }}" class="mono t" style="height: 28px; margin-top: 4px; border: none; border-top: 1px solid {{c.line}}; background: transparent; color: {{c.accent}}; font-size: 11px; font-family: inherit; cursor: pointer;">{{ tlLabel }}</button></sc-if>
+    </section>
+
+    <section class="r5 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px 4px 12px; display: flex; flex-direction: column; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 6px;"><div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">03 · Evidence</span><span class="zh" style="font-size: 16px; font-weight: 700;">证据 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 2 项 · 哈希已存档</span></span></div><a href="#" class="mono" style="font-size: 10px; color: {{c.accent}};">补充证据 ↗</a></div>
+      <div class="t" style="display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; height: 40px; border-top: 1px solid {{c.line}};"><span class="zh" style="font-size: 14px; color: {{c.body}};"><span style="font-weight: 600; color: {{c.ink}};">提款申请页截图</span> <span class="mono" style="font-size: 10px; color: {{c.muted}};">3f9a…c21e</span></span><span class="mono" style="font-size: 10px; color: {{c.muted}}; border: 1px solid {{c.line}}; padding: 1px 5px; border-radius: 3px;">已脱敏</span></div>
+      <div class="t" style="display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; height: 40px; border-top: 1px solid {{c.line}};"><span class="zh" style="font-size: 14px; color: {{c.body}};"><span style="font-weight: 600; color: {{c.ink}};">客服对话记录</span> <span class="mono" style="font-size: 10px; color: {{c.muted}};">b71d…08aa</span></span><span class="mono" style="font-size: 10px; color: {{c.muted}}; border: 1px solid {{c.line}}; padding: 1px 5px; border-radius: 3px;">已脱敏</span></div>
+    </section>
+
+    <section class="r5" style="flex-shrink: 0; margin: 8px 16px 0 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px;">
+      <a href="#" class="t" style="height: 38px; border-radius: 10px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>TG 推送已开</a>
+      <a href="#" class="t" style="height: 38px; border-radius: 10px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center;">已解决 · 撤回</a>
+    </section>
+  </sc-if>
+
+  <!-- ============ CASE ============ -->
+  <sc-if value="{{ isCase }}" hint-placeholder-val="{{ false }}">
+    <section class="r2 t" style="flex-shrink: 0; margin: 12px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
+      <div style="display: flex; align-items: baseline; justify-content: space-between;"><div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">01 · Case #cp_002</span><span class="zh" style="font-size: 16px; font-weight: 700;">案件结论 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 公开摘要</span></span></div><span class="mono stamp" style="font-size: 11px; font-weight: 600; letter-spacing: .1em; color: {{c.red}}; border: 1.5px solid {{c.red}}; padding: 2px 7px; border-radius: 4px;">已曝光</span></div>
+      <span class="zh" style="font-size: 20px; font-weight: 900; line-height: 1.25; letter-spacing: -0.01em;">赢家体育 以"套利"为由拒付 3,800 U 并失联</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1; color: {{c.red}};">3,800 U</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">拒付金额</span></div>
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1;">2 次</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">通知无响应</span></div>
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1;">8 天</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">受理到曝光</span></div>
+      </div>
+      <a href="Brand.dc.html" class="t" style="display: grid; grid-template-columns: 56px 1fr auto; gap: 8px; align-items: center; border-top: 1px dashed {{c.line}}; padding-top: 8px;">
+        <svg width="56" height="36" viewBox="0 0 64 40" aria-hidden="true"><path d="M8 32 A24 24 0 0 1 56 32" fill="none" stroke="{{c.track}}" stroke-width="3.5"/><path d="M8 32 A24 24 0 0 1 12.6 17.9" fill="none" stroke="{{c.red}}" stroke-width="3.5"/><path d="M12.6 17.9 A24 24 0 0 1 49 15" fill="none" stroke="{{c.amber}}" stroke-width="3.5"/><path d="M49 15 A24 24 0 0 1 56 32" fill="none" stroke="{{c.green}}" stroke-width="3.5"/><g style="transform-origin: 32px 32px; transform: rotate(-16.2deg); filter: {{c.needleGlow}};"><line x1="32" y1="32" x2="32" y2="13" stroke="{{c.needle}}" stroke-width="1.8" stroke-linecap="round"/></g><circle cx="32" cy="32" r="2.5" fill="{{c.ink}}"/></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;"><span class="zh" style="font-size: 14px; color: {{c.body}};"><span style="font-weight: 600; color: {{c.ink}};">赢家体育</span> 观察 · 评分 41 · 曝光中</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">拒付率 14% · 3 件失联 · 钱包与财神棋牌共用</span></div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{c.muted}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+    </section>
+
+    <section class="r3 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">02 · Statements</span><span class="zh" style="font-size: 16px; font-weight: 700;">双方陈述 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 原文附证据哈希</span></span></div>
+      <div class="t" style="display: flex; flex-direction: column; gap: 4px; border-left: 2px solid {{c.ink}}; padding-left: 10px;"><span class="mono" style="font-size: 10px; color: {{c.muted}};">用户 · 08-15 · 已绑定（自报级）</span><span class="zh" style="font-size: 13px; line-height: 1.55; color: {{c.body}};">赢 3,800 U 后申请提款，次日账号被冻结，客服称"套利行为"不予支付，未给出具体规则条款。</span></div>
+      <div class="t" style="display: flex; flex-direction: column; gap: 4px; border-left: 2px solid {{c.line}}; padding-left: 10px;"><span class="mono" style="font-size: 10px; color: {{c.muted}};">运营商 · 答辩期 08-15 → 08-22</span><span class="zh" style="font-size: 13px; line-height: 1.55; color: {{c.muted}}; font-style: italic;">两次通知（认领邮箱 + TG）均无响应。运营商仍可提交答辩，原文将附于本页。</span></div>
+    </section>
+
+    <section class="r4 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px 10px 12px; display: flex; flex-direction: column; position: relative; color: {{c.ink}};">
+      <span class="cb tl"></span><span class="cb br"></span>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 8px;"><div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">03 · Timeline</span><span class="zh" style="font-size: 16px; font-weight: 700;">判定过程 <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— 只追加 · 可审计</span></span></div><a href="#" class="mono" style="font-size: 10px; color: {{c.accent}};">证据标准 ↗</a></div>
+      <div style="display: flex; flex-direction: column; position: relative; padding-left: 14px;">
+        <span aria-hidden="true" style="position: absolute; left: 4px; top: 6px; bottom: 6px; width: 1px; background: {{c.line}};"></span>
+        <sc-for list="{{ tlShown }}" as="e" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: 44px 1fr; gap: 8px; align-items: start; padding: 5px 0; position: relative;">
+            <span class="dt" aria-hidden="true" style="position: absolute; left: -13px; top: 10px; width: 7px; height: 7px; border-radius: 4px; background: {{ e.dot }}; animation-delay: {{ e.delay }};"></span>
+            <span class="mono" style="font-size: 10px; color: {{c.muted}}; padding-top: 2px;">{{ e.date }}</span>
+            <span class="zh" style="font-size: 13px; line-height: 1.5; color: {{c.body}}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span style="font-weight: 600; color: {{ e.subjColor }};">{{ e.subj }}</span> {{ e.rest }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ moreTl }}" hint-placeholder-val="{{ true }}"><button onClick="{{ toggleTl }}" class="mono t" style="height: 28px; margin-top: 4px; border: none; border-top: 1px solid {{c.line}}; background: transparent; color: {{c.accent}}; font-size: 11px; font-family: inherit; cursor: pointer;">{{ tlLabel }}</button></sc-if>
+    </section>
+
+    <section class="r5" style="flex-shrink: 0; margin: 8px 16px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+      <a href="Complaint.dc.html" class="t" style="height: 44px; border-radius: 11px; background: {{c.ink}}; color: {{c.bg}}; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">我也遇到了 · 提交投诉<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg></a>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px;">
+        <a href="#" class="t" style="height: 38px; border-radius: 10px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>分享案件</a>
+        <a href="#" class="t" style="height: 38px; border-radius: 10px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center;">运营商答辩入口</a>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- 声明 -->
+  <div class="mono" style="flex-shrink: 0; padding: 10px 18px 0 18px; font-size: 10px; color: {{c.muted}}; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+    <span style="border: 1px solid {{c.muted}}; padding: 0 3px; border-radius: 3px;">18+</span><span>不向中国大陆居民提供服务</span><a href="#" style="text-decoration: underline;">证据标准</a><a href="#" style="text-decoration: underline;">隐私与删除</a><a href="#" style="text-decoration: underline;">仲裁规则</a>
+  </div>
+
+  <!-- 底栏 -->
+  <nav aria-label="主导航" class="t" style="position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: {{c.navBg}}; backdrop-filter: blur(12px); border-top: 1px solid {{c.line}}; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; padding: 4px 10px 8px 10px; color: {{c.muted}};">
+    <a href="HomeV9.dc.html" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>首页</a>
+    <a href="Check.dc.html" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>查验</a>
+    <a href="#" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/></svg>优惠</a>
+    <a href="#" aria-current="page" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; font-weight: 600; color: {{c.ink}};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M12 9h.01"/></svg>投诉<span style="width: 12px; height: 2px; border-radius: 1px; background: {{c.accent}}; display: block;"></span></a>
+    <a href="#" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>我的</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"step":{"editor":"enum","options":["form","progress","case"],"default":"form","section":"步骤"},"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"主题"},"$preview":{"width":390,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { theme: null, cat: 'delay', tlOpen: false }; }
+  tokens(dark) {
+    return dark ? { bg:'#0B0C11', surface:'#14161D', line:'#262A35', track:'#22252E', ink:'#F2F3F7', body:'#C3C7D1', muted:'#8B90A0', accent:'#7A93FF', dot:'rgba(255,255,255,0.045)', navBg:'rgba(11,12,17,0.88)', red:'#FF5C63', amber:'#FFB83D', green:'#2EDB86', purple:'#B08CFF', needle:'#FFFFFF', needleGlow:'drop-shadow(0 0 5px rgba(122,147,255,0.95)) drop-shadow(0 0 12px rgba(122,147,255,0.55))' }
+                : { bg:'#F2F3F6', surface:'#FFFFFF', line:'#DEDFE5', track:'#E8E9EE', ink:'#111114', body:'#3A3F4A', muted:'#6B6F7A', accent:'#2B5CFF', dot:'rgba(17,17,20,0.06)', navBg:'rgba(242,243,246,0.9)', red:'#E5484D', amber:'#E9A23B', green:'#17B26A', purple:'#7C5CFF', needle:'#111114', needleGlow:'none' };
+  }
+  steps(c, cur, doneColor) {
+    const names = ['提交','初筛','受理','答辩','结果'];
+    return names.map((label, i) => {
+      const done = i < cur, now = i === cur;
+      return { label, bg: done ? doneColor : (now ? c.surface : c.surface), bd: done ? doneColor : (now ? doneColor : c.line), dot: done ? c.surface : (now ? doneColor : 'transparent'), anim: now ? 'running' : 'paused', fg: done || now ? c.ink : c.muted, fw: now ? 700 : 500 };
+    });
+  }
+  renderVals() {
+    const theme = this.state.theme || this.props.theme || 'light'; const dark = theme === 'dark'; const c = this.tokens(dark);
+    const step = this.props.step || 'form';
+    const tl = (arr) => arr.map((e, i) => ({ ...e, delay: (0.4 + i * 0.18) + 's', dot: e.dot || c.muted, subjColor: e.subjColor || c.ink }));
+    const S = {
+      form: { title:'提交投诉', sub:'受理即通知运营商 · 答辩期 7 天', badge:'第 1 步', showSteps:true, steps:this.steps(c, 0, c.ink), progressPct:'0%', progressColor:c.ink,
+        timeline: [] },
+      progress: { title:'我的投诉 · #cp_005', sub:'赢家体育 · 提款 1,000 U 未到账', badge:'进行中', showSteps:true, steps:this.steps(c, 3, c.amber), progressPct:'60%', progressColor:c.amber,
+        timeline: tl([{date:'09-21',subj:'已提交',rest:'2 项证据哈希存档'},{date:'09-21',subj:'受理',rest:'Agent 初筛通过 · 人工复核确认',dot:c.ink},{date:'09-21',subj:'通知运营商',rest:'认领邮箱 + TG · 答辩期至 09-28',dot:c.amber,subjColor:c.amber},{date:'待定',subj:'二次通知',rest:'09-28 无响应时自动触发',subjColor:c.muted}]) },
+      case: { title:'案件 #cp_002', sub:'公开摘要 · 2026-08-23 曝光', badge:'已曝光', showSteps:false, steps:[], progressPct:'100%', progressColor:c.red,
+        timeline: tl([{date:'08-15',subj:'提交',rest:'3 项证据 · 入金链上哈希'},{date:'08-15',subj:'受理并通知',rest:'认领邮箱 + TG'},{date:'08-19',subj:'二次通知',rest:'答辩期内无响应',dot:c.amber},{date:'08-23',subj:'判定失联 · 转曝光',rest:'曝光页发布 · 品牌标记曝光中',dot:c.red,subjColor:c.red},{date:'08-23',subj:'关联标注',rest:'钱包与财神棋牌共用（置信 92%）'}]) }
+    };
+    const s = S[step];
+    const catDefs = [['refused','拒付'],['delay','提款延迟'],['frozen','冻结账号'],['bonus','优惠争议'],['closed','关站失联']];
+    const cats = catDefs.map(([id,label]) => ({ label, bd: id===this.state.cat ? c.ink : c.line, bg: id===this.state.cat ? c.ink : 'transparent', fg: id===this.state.cat ? c.bg : c.body, fw: id===this.state.cat ? 700 : 500, pick: () => this.setState({ cat: id }) }));
+    const LIM = 2, open = this.state.tlOpen;
+    return { c, s, cats, isForm: step==='form', isProgress: step==='progress', isCase: step==='case', isDark: dark, isLight: !dark,
+      toggleTheme: () => this.setState({ theme: dark ? 'light' : 'dark' }),
+      tlShown: open ? s.timeline : s.timeline.slice(0, LIM), moreTl: s.timeline.length > LIM, tlLabel: open ? '收起 ‹' : ('展开全部 ' + s.timeline.length + ' 条 ›'), toggleTl: () => this.setState({ tlOpen: !open }) };
+  }
+}
+</script>
+</body>
+</html>

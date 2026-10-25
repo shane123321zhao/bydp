@@ -1,0 +1,544 @@
+{
+  "_schema": "架构 v1.3 §7 运营商域。字段名 = 实体属性（camelCase）。status ∈ certified|watch|blacklist；ownership ∈ official|fake|pending；所有金额 USDT。",
+  "operators": [
+    {
+      "id": "op_001",
+      "legalName": "Golden Dragon Interactive Ltd.",
+      "jurisdiction": "PH",
+      "foundedYear": 2018,
+      "relatedParty": false
+    },
+    {
+      "id": "op_002",
+      "legalName": "未知主体（关联图谱推断）",
+      "jurisdiction": null,
+      "foundedYear": null,
+      "relatedParty": false
+    },
+    {
+      "id": "op_003",
+      "legalName": "Starlight Gaming N.V.",
+      "jurisdiction": "CW",
+      "foundedYear": 2023,
+      "relatedParty": false
+    },
+    {
+      "id": "op_004",
+      "legalName": "Crown Pacific Entertainment",
+      "jurisdiction": "CW",
+      "foundedYear": 2020,
+      "relatedParty": true
+    },
+    {
+      "id": "op_005",
+      "legalName": "Royal Asia Gaming Ltd.",
+      "jurisdiction": "CW",
+      "foundedYear": 2019,
+      "relatedParty": false
+    },
+    {
+      "id": "op_006",
+      "legalName": "Dragon Rise Sports Inc.",
+      "jurisdiction": "PH",
+      "foundedYear": 2021,
+      "relatedParty": false
+    },
+    {
+      "id": "op_007",
+      "legalName": "未知主体",
+      "jurisdiction": null,
+      "foundedYear": null,
+      "relatedParty": false
+    }
+  ],
+  "brands": [
+    {
+      "id": "br_jinlong",
+      "operatorId": "op_001",
+      "slug": "jinlong",
+      "name": {
+        "zhHans": "金龙娱乐城",
+        "zhHant": "金龍娛樂城",
+        "en": "JinLong Casino"
+      },
+      "status": "certified",
+      "statusSince": "2026-06-12",
+      "certifiedDepositUsdt": 200000,
+      "markets": [
+        "MY",
+        "SG",
+        "PH"
+      ],
+      "hasActiveExposure": false,
+      "logoUrl": null
+    },
+    {
+      "id": "br_winner",
+      "operatorId": "op_002",
+      "slug": "winner-sports",
+      "name": {
+        "zhHans": "赢家体育",
+        "zhHant": "贏家體育",
+        "en": "Winner Sports"
+      },
+      "status": "watch",
+      "statusSince": "2026-03-02",
+      "certifiedDepositUsdt": null,
+      "markets": [
+        "MY",
+        "TH",
+        "VN"
+      ],
+      "hasActiveExposure": true,
+      "logoUrl": null
+    },
+    {
+      "id": "br_starlight",
+      "operatorId": "op_003",
+      "slug": "starlight-lottery",
+      "name": {
+        "zhHans": "星辰彩票",
+        "zhHant": "星辰彩票",
+        "en": "Starlight Lottery"
+      },
+      "status": "watch",
+      "statusSince": "2026-09-10",
+      "certifiedDepositUsdt": null,
+      "markets": [
+        "SG",
+        "MY"
+      ],
+      "hasActiveExposure": false,
+      "logoUrl": null
+    },
+    {
+      "id": "br_caishen",
+      "operatorId": "op_002",
+      "slug": "caishen-poker",
+      "name": {
+        "zhHans": "财神棋牌",
+        "zhHant": "財神棋牌",
+        "en": "CaiShen Poker"
+      },
+      "status": "blacklist",
+      "statusSince": "2026-07-28",
+      "certifiedDepositUsdt": null,
+      "markets": [
+        "MY",
+        "KH"
+      ],
+      "hasActiveExposure": true,
+      "logoUrl": null
+    },
+    {
+      "id": "br_crown",
+      "operatorId": "op_004",
+      "slug": "crown-pacific",
+      "name": {
+        "zhHans": "皇冠太平洋",
+        "zhHant": "皇冠太平洋",
+        "en": "Crown Pacific"
+      },
+      "status": "watch",
+      "statusSince": "2026-01-15",
+      "certifiedDepositUsdt": null,
+      "markets": [
+        "PH",
+        "TW",
+        "HK"
+      ],
+      "hasActiveExposure": false,
+      "logoUrl": null
+    },
+    {
+      "id": "br_royal",
+      "operatorId": "op_005",
+      "slug": "royal-asia",
+      "name": {
+        "zhHans": "皇家娱乐",
+        "zhHant": "皇家娛樂",
+        "en": "Royal Asia"
+      },
+      "status": "certified",
+      "statusSince": "2026-08-01",
+      "certifiedDepositUsdt": 150000,
+      "markets": [
+        "SG",
+        "MY",
+        "TW"
+      ],
+      "hasActiveExposure": false,
+      "logoUrl": null
+    },
+    {
+      "id": "br_longteng",
+      "operatorId": "op_006",
+      "slug": "longteng-sports",
+      "name": {
+        "zhHans": "龙腾体育",
+        "zhHant": "龍騰體育",
+        "en": "LongTeng Sports"
+      },
+      "status": "watch",
+      "statusSince": "2026-05-10",
+      "certifiedDepositUsdt": null,
+      "markets": [
+        "PH",
+        "VN"
+      ],
+      "hasActiveExposure": false,
+      "logoUrl": null
+    },
+    {
+      "id": "br_haoyun",
+      "operatorId": "op_007",
+      "slug": "haoyun-poker",
+      "name": {
+        "zhHans": "好运棋牌",
+        "zhHant": "好運棋牌",
+        "en": "HaoYun Poker"
+      },
+      "status": "blacklist",
+      "statusSince": "2026-06-02",
+      "certifiedDepositUsdt": null,
+      "markets": [
+        "MY",
+        "TH"
+      ],
+      "hasActiveExposure": true,
+      "logoUrl": null
+    }
+  ],
+  "identifiers": [
+    {
+      "id": "idf_001",
+      "brandId": "br_jinlong",
+      "type": "domain",
+      "value": "jinlong88.com",
+      "ownership": "official",
+      "firstSeen": "2018-05-01",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "primary": true
+    },
+    {
+      "id": "idf_002",
+      "brandId": "br_jinlong",
+      "type": "mirror",
+      "value": "jinlong88.vip",
+      "ownership": "official",
+      "firstSeen": "2024-02-11",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "primary": false
+    },
+    {
+      "id": "idf_003",
+      "brandId": "br_jinlong",
+      "type": "tg",
+      "value": "@jinlong_official",
+      "ownership": "official",
+      "firstSeen": "2021-06-01",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "primary": false
+    },
+    {
+      "id": "idf_004",
+      "brandId": "br_jinlong",
+      "type": "domain",
+      "value": "jin1ong88.com",
+      "ownership": "fake",
+      "firstSeen": "2026-08-30",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "fakeNote": "字母 l 替换为数字 1，登录页克隆官方站",
+      "primary": false
+    },
+    {
+      "id": "idf_005",
+      "brandId": "br_winner",
+      "type": "domain",
+      "value": "winner-sport.co",
+      "ownership": "official",
+      "firstSeen": "2025-11-20",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "primary": true
+    },
+    {
+      "id": "idf_006",
+      "brandId": "br_caishen",
+      "type": "domain",
+      "value": "caishenqp.com",
+      "ownership": "official",
+      "firstSeen": "2025-04-03",
+      "lastChecked": "2026-09-22",
+      "online": false,
+      "primary": false
+    },
+    {
+      "id": "idf_007",
+      "brandId": "br_caishen",
+      "type": "domain",
+      "value": "cs-poker.net",
+      "ownership": "official",
+      "firstSeen": "2026-08-01",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "note": "跑路后重开域名",
+      "primary": true
+    },
+    {
+      "id": "idf_008",
+      "brandId": "br_caishen",
+      "type": "wallet",
+      "value": "TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE",
+      "ownership": "official",
+      "chain": "TRC20",
+      "firstSeen": "2025-06-15",
+      "lastChecked": "2026-09-20",
+      "online": true,
+      "note": "收款地址与赢家体育共用",
+      "primary": false
+    },
+    {
+      "id": "idf_009",
+      "brandId": "br_winner",
+      "type": "wallet",
+      "value": "TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE",
+      "ownership": "official",
+      "chain": "TRC20",
+      "firstSeen": "2026-01-10",
+      "lastChecked": "2026-09-20",
+      "online": true,
+      "primary": false
+    },
+    {
+      "id": "idf_010",
+      "brandId": "br_starlight",
+      "type": "domain",
+      "value": "starlight-lotto.com",
+      "ownership": "official",
+      "firstSeen": "2026-08-25",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "primary": true
+    },
+    {
+      "id": "idf_011",
+      "brandId": "br_crown",
+      "type": "app",
+      "value": "com.crownpacific.app",
+      "ownership": "official",
+      "firstSeen": "2020-09-01",
+      "lastChecked": "2026-09-22",
+      "online": true,
+      "primary": false
+    }
+  ],
+  "entityLinks": [
+    {
+      "id": "el_001",
+      "fromId": "br_caishen",
+      "toId": "br_winner",
+      "linkType": "shared_wallet",
+      "confidence": 0.92,
+      "evidence": "TRC20 收款地址相同",
+      "confirmedBy": "human",
+      "confirmedAt": "2026-08-05"
+    },
+    {
+      "id": "el_002",
+      "fromId": "idf_006",
+      "toId": "idf_007",
+      "linkType": "same_template",
+      "confidence": 0.81,
+      "evidence": "页面模板哈希、客服 TG 号相同",
+      "confirmedBy": "human",
+      "confirmedAt": "2026-08-12"
+    },
+    {
+      "id": "el_003",
+      "fromId": "idf_004",
+      "toId": "br_jinlong",
+      "linkType": "impersonates",
+      "confidence": 0.97,
+      "evidence": "域名形近 + 页面克隆",
+      "confirmedBy": "human",
+      "confirmedAt": "2026-09-01"
+    }
+  ],
+  "licenses": [
+    {
+      "id": "lic_001",
+      "brandId": "br_jinlong",
+      "regulator": "PAGCOR",
+      "licenseNo": "OGL-2018-0421",
+      "verifiedAt": "2026-09-01",
+      "verifiedAgainst": "监管公开名录",
+      "valid": true
+    },
+    {
+      "id": "lic_002",
+      "brandId": "br_crown",
+      "regulator": "Curacao GCB",
+      "licenseNo": "OGL/2024/1183/0912",
+      "verifiedAt": "2026-08-20",
+      "verifiedAgainst": "监管公开名录",
+      "valid": true
+    },
+    {
+      "id": "lic_003",
+      "brandId": "br_starlight",
+      "regulator": "Curacao (claimed)",
+      "licenseNo": "8048/JAZ",
+      "verifiedAt": "2026-09-11",
+      "verifiedAgainst": "监管公开名录",
+      "valid": false,
+      "note": "自称持牌，名录无记录"
+    },
+    {
+      "id": "lic_004",
+      "brandId": "br_royal",
+      "regulator": "Curacao GCB",
+      "licenseNo": "OGL/2023/0912/0441",
+      "verifiedAt": "2026-08-01",
+      "verifiedAgainst": "监管公开名录",
+      "valid": true
+    },
+    {
+      "id": "lic_005",
+      "brandId": "br_longteng",
+      "regulator": "PAGCOR",
+      "licenseNo": "OGL-2021-0187",
+      "verifiedAt": "2026-05-10",
+      "verifiedAgainst": "监管公开名录",
+      "valid": true
+    }
+  ],
+  "brandAttributes": [
+    {
+      "brandId": "br_jinlong",
+      "dimension": "payment",
+      "values": [
+        "USDT-TRC20",
+        "Touch 'n Go",
+        "DuitNow",
+        "GrabPay"
+      ],
+      "source": "agent",
+      "verified": true
+    },
+    {
+      "brandId": "br_jinlong",
+      "dimension": "gameProvider",
+      "values": [
+        "Evolution",
+        "PG Soft",
+        "SA Gaming",
+        "Pragmatic Play"
+      ],
+      "source": "agent",
+      "verified": true
+    },
+    {
+      "brandId": "br_jinlong",
+      "dimension": "withdrawalLimit",
+      "values": [
+        "单笔 50,000 USDT",
+        "日 200,000 USDT"
+      ],
+      "source": "human",
+      "verified": true
+    },
+    {
+      "brandId": "br_jinlong",
+      "dimension": "support",
+      "values": [
+        "24h 在线客服",
+        "Telegram",
+        "中文"
+      ],
+      "source": "agent",
+      "verified": true
+    },
+    {
+      "brandId": "br_winner",
+      "dimension": "payment",
+      "values": [
+        "USDT-TRC20",
+        "银行转账"
+      ],
+      "source": "agent",
+      "verified": false
+    },
+    {
+      "brandId": "br_winner",
+      "dimension": "gameProvider",
+      "values": [
+        "自研体育",
+        "AG"
+      ],
+      "source": "agent",
+      "verified": false
+    },
+    {
+      "brandId": "br_starlight",
+      "dimension": "payment",
+      "values": [
+        "USDT-TRC20"
+      ],
+      "source": "agent",
+      "verified": false
+    },
+    {
+      "brandId": "br_crown",
+      "dimension": "payment",
+      "values": [
+        "USDT-TRC20",
+        "GCash",
+        "Maya"
+      ],
+      "source": "agent",
+      "verified": true
+    },
+    {
+      "brandId": "br_crown",
+      "dimension": "gameProvider",
+      "values": [
+        "Evolution",
+        "JILI",
+        "Fa Chai"
+      ],
+      "source": "agent",
+      "verified": true
+    }
+  ],
+  "candidates": [
+    {
+      "id": "cand_001",
+      "identifierType": "domain",
+      "value": "lucky777-my.com",
+      "queryCount7d": 43,
+      "weightedPriority": 0.71,
+      "firstQueried": "2026-09-15",
+      "riskSignals": [
+        "域名注册 < 30 天",
+        "无隐私政策页",
+        "客服 TG 与已黑名单站相同"
+      ],
+      "status": "pending_review"
+    },
+    {
+      "id": "cand_002",
+      "identifierType": "tg",
+      "value": "@vip_baccarat_888",
+      "queryCount7d": 6,
+      "weightedPriority": 0.22,
+      "firstQueried": "2026-09-20",
+      "riskSignals": [],
+      "status": "pending_review"
+    }
+  ]
+}

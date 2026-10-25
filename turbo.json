@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "typecheck": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "passThroughEnv": [
+        "DATABASE_URL",
+        "DATABASE_URL_SCORING_RO",
+        "DATABASE_URL_APP",
+        "BYDP_CI",
+        "REDIS_URL",
+        "AUTH_PII_KEY"
+      ]
+    }
+  }
+}

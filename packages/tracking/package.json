@@ -1,0 +1,19 @@
+{
+  "name": "@bydp/tracking",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@bydp/db": "workspace:*",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  }
+}

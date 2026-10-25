@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>BYDP 名单页 · 四库</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'IBM Plex Sans','Noto Sans SC',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.zh{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.t{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
+.cb{position:absolute;width:7px;height:7px;opacity:.55}
+.cb.tl{left:6px;top:6px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor}
+.cb.tr{right:6px;top:6px;border-right:1.5px solid currentColor;border-top:1.5px solid currentColor}
+.cb.bl{left:6px;bottom:6px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor}
+.cb.br{right:6px;bottom:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.r1{animation:rise .5s ease-out .05s both}.r2{animation:rise .5s ease-out .18s both}.r3{animation:rise .5s ease-out .3s both}
+@keyframes scan{0%{left:-30%}100%{left:100%}}
+.scan{position:absolute;top:0;height:1px;width:30%;animation:scan 3.4s linear infinite}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.fade{animation:fade .3s ease-out both}
+.hs{overflow-x:auto;scrollbar-width:none}.hs::-webkit-scrollbar{display:none}
+.nd{transition:transform 1.6s cubic-bezier(.3,.7,.2,1)}
+</style>
+</helmet>
+<div class="t" style="width: 390px; height: 1200px; box-sizing: border-box; position: relative; overflow: hidden; background: {{c.bg}}; color: {{c.ink}}; display: flex; flex-direction: column; background-image: radial-gradient({{c.dot}} 1px, transparent 1px); background-size: 18px 18px;">
+
+  <!-- 顶栏 -->
+  <header class="r1 t" style="flex-shrink: 0; height: 48px; padding: 0 12px 0 8px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid {{c.line}}; position: relative; background: {{c.bg}};">
+    <span class="scan" aria-hidden="true" style="background: linear-gradient(90deg, transparent, {{c.accent}}, transparent);"></span>
+    <a href="HomeV9.dc.html" aria-label="返回" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.1;"><span class="zh" style="font-size: 16px; font-weight: 700;">名单</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">1,284 平台 · 每日 02:00 重算</span></div>
+    <button onClick="{{ toggleTheme }}" aria-label="切换日夜" class="t" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0;">
+      <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></sc-if>
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></sc-if>
+    </button>
+    <button aria-label="搜索" class="t" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+  </header>
+
+  <!-- 四库切换 -->
+  <div class="r2 t" style="flex-shrink: 0; margin: 12px 16px 0 16px; height: 44px; border: 1px solid {{c.line}}; border-radius: 12px; background: {{c.surface}}; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 3px; gap: 2px;">
+    <sc-for list="{{ libs }}" as="l" hint-placeholder-count="4">
+      <button onClick="{{ l.pick }}" class="t" style="height: 36px; border-radius: 9px; border: none; background: {{ l.bg }}; color: {{ l.fg }}; font-family: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0;"><span class="zh" style="font-size: 12px; font-weight: {{ l.fw }}; line-height: 1;">{{ l.label }}</span><span class="mono" style="font-size: 10px; line-height: 1; color: {{ l.cfg }};">{{ l.count }}</span></button>
+    </sc-for>
+  </div>
+
+  <!-- 筛选行 -->
+  <div class="r2" style="flex-shrink: 0; margin: 8px 0 0 0; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
+    <div class="hs" style="display: flex; gap: 6px; flex-grow: 1; min-width: 0;">
+      <sc-for list="{{ regions }}" as="rg" hint-placeholder-count="6">
+        <button onClick="{{ rg.pick }}" class="mono t" style="flex-shrink: 0; height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid {{ rg.bd }}; background: {{ rg.bg }}; color: {{ rg.fg }}; font-size: 11px; font-family: inherit; cursor: pointer;">{{ rg.label }}</button>
+      </sc-for>
+    </div>
+    <button class="mono t" style="flex-shrink: 0; height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid {{c.line}}; background: {{c.surface}}; color: {{c.ink}}; font-size: 11px; font-family: inherit; display: flex; align-items: center; gap: 4px;">评分 ↓</button>
+  </div>
+
+  <!-- 01 列表 -->
+  <section class="r3 t fade" style="flex-shrink: 0; margin: 8px 16px 0 16px; background: {{c.surface}}; border: 1px solid {{c.line}}; border-radius: 14px; padding: 10px 12px 4px 12px; display: flex; flex-direction: column; position: relative; color: {{c.ink}};">
+    <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
+    <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 6px;">
+      <div style="display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 10px; color: {{c.muted}}; text-transform: uppercase; letter-spacing: .14em;">01 · {{ L.key }}</span><span class="zh" style="font-size: 16px; font-weight: 700;">{{ L.title }} <span style="font-weight: 400; color: {{c.muted}}; font-size: 12px;">— {{ L.sub }}</span></span></div>
+      <a href="#" class="mono" style="font-size: 10px; color: {{c.accent}};">{{ L.link }} ↗</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding-bottom: 6px;">
+      <sc-for list="{{ L.kpi }}" as="k" hint-placeholder-count="3">
+        <div class="t" style="border: 1px solid {{c.line}}; border-radius: 9px; padding: 7px 8px 5px 8px; display: flex; flex-direction: column; gap: 1px;"><span class="mono" style="font-size: 15px; font-weight: 600; line-height: 1.1; color: {{ k.color }};">{{ k.v }}</span><span class="mono" style="font-size: 10px; color: {{c.muted}};">{{ k.k }}</span></div>
+      </sc-for>
+    </div>
+    <sc-for list="{{ rowsShown }}" as="r" hint-placeholder-count="4">
+      <a href="Brand.dc.html" class="t" style="display: grid; grid-template-columns: 18px 56px 1fr auto; gap: 8px; align-items: center; height: 56px; border-top: 1px solid {{c.line}};">
+        <span class="mono" style="font-size: 10px; color: {{c.muted}};">{{ r.rank }}</span>
+        <svg width="56" height="36" viewBox="0 0 64 40" aria-hidden="true"><path d="M8 32 A24 24 0 0 1 56 32" fill="none" stroke="{{c.track}}" stroke-width="3.5"/><path d="M8 32 A24 24 0 0 1 12.6 17.9" fill="none" stroke="{{c.red}}" stroke-width="3.5"/><sc-if value="{{ r.scored }}" hint-placeholder-val="{{ true }}"><path d="M12.6 17.9 A24 24 0 0 1 49 15" fill="none" stroke="{{c.amber}}" stroke-width="3.5"/><path d="M49 15 A24 24 0 0 1 56 32" fill="none" stroke="{{c.green}}" stroke-width="3.5"/></sc-if><g class="nd" style="transform-origin: 32px 32px; transform: rotate({{ r.deg }}deg); filter: {{ r.glow }};"><line x1="32" y1="32" x2="32" y2="13" stroke="{{ r.needle }}" stroke-width="1.8" stroke-linecap="round"/></g><circle cx="32" cy="32" r="2.5" fill="{{ r.hub }}"/></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+          <span class="zh" style="font-size: 14px; color: {{c.body}}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span style="font-weight: 600; color: {{c.ink}};">{{ r.name }}</span> {{ r.meta }}</span>
+          <span class="mono" style="font-size: 10px; color: {{c.muted}}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ r.sub }}</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0;">
+          <span class="mono" style="font-size: 18px; font-weight: 600; line-height: 1; color: {{ r.scoreColor }};">{{ r.score }}</span>
+          <span class="mono" style="font-size: 10px; color: {{ r.tagColor }}; border: 1px solid {{ r.tagColor }}; padding: 0 4px; border-radius: 3px; background: {{ r.tagBg }};">{{ r.tag }}</span>
+        </div>
+      </a>
+    </sc-for>
+    <sc-if value="{{ moreRows }}" hint-placeholder-val="{{ true }}"><button onClick="{{ toggleRows }}" class="mono t" style="height: 32px; border: none; border-top: 1px solid {{c.line}}; background: transparent; color: {{c.accent}}; font-size: 11px; font-family: inherit; cursor: pointer;">{{ rowsLabel }}</button></sc-if>
+  </section>
+
+  <!-- 说明 -->
+  <div class="r3 t" style="flex-shrink: 0; margin: 8px 16px 0 16px; display: flex; gap: 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid {{c.line}}; align-items: flex-start;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{c.muted}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+    <span class="zh" style="font-size: 12px; line-height: 1.55; color: {{c.body}};">{{ L.note }}</span>
+  </div>
+
+  <!-- 声明 -->
+  <div class="mono" style="flex-shrink: 0; padding: 10px 18px 0 18px; font-size: 10px; color: {{c.muted}}; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+    <span style="border: 1px solid {{c.muted}}; padding: 0 3px; border-radius: 3px;">18+</span><span>不向中国大陆居民提供服务</span><a href="#" style="text-decoration: underline;">评分方法</a><a href="#" style="text-decoration: underline;">认证标准</a><a href="#" style="text-decoration: underline;">联盟披露</a>
+  </div>
+
+  <!-- 底栏 -->
+  <nav aria-label="主导航" class="t" style="position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: {{c.navBg}}; backdrop-filter: blur(12px); border-top: 1px solid {{c.line}}; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; padding: 4px 10px 8px 10px; color: {{c.muted}};">
+    <a href="HomeV9.dc.html" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>首页</a>
+    <a href="Check.dc.html" aria-current="page" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; font-weight: 600; color: {{c.ink}};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>查验<span style="width: 12px; height: 2px; border-radius: 1px; background: {{c.accent}}; display: block;"></span></a>
+    <a href="#" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/></svg>优惠</a>
+    <a href="#" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M12 9h.01"/></svg>投诉</a>
+    <a href="#" style="height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>我的</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lib":{"editor":"enum","options":["certified","watch","licensed","blacklist"],"default":"certified","section":"名单"},"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"主题"},"$preview":{"width":390,"height":1200}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { theme: null, lib: null, region: 'ALL', open: false, armed: false }; this.tm = null; }
+  componentDidMount() { this.tm = setTimeout(() => this.setState({ armed: true }), 300); }
+  componentWillUnmount() { if (this.tm) clearTimeout(this.tm); }
+  tokens(dark) {
+    return dark ? { bg:'#0B0C11', surface:'#14161D', line:'#262A35', track:'#22252E', ink:'#F2F3F7', body:'#C3C7D1', muted:'#8B90A0', accent:'#7A93FF', dot:'rgba(255,255,255,0.045)', navBg:'rgba(11,12,17,0.88)', red:'#FF5C63', amber:'#FFB83D', green:'#2EDB86', purple:'#B08CFF', needle:'#FFFFFF', needleGlow:'drop-shadow(0 0 5px rgba(122,147,255,0.95)) drop-shadow(0 0 12px rgba(122,147,255,0.55))' }
+                : { bg:'#F2F3F6', surface:'#FFFFFF', line:'#DEDFE5', track:'#E8E9EE', ink:'#111114', body:'#3A3F4A', muted:'#6B6F7A', accent:'#2B5CFF', dot:'rgba(17,17,20,0.06)', navBg:'rgba(242,243,246,0.9)', red:'#E5484D', amber:'#E9A23B', green:'#17B26A', purple:'#7C5CFF', needle:'#111114', needleGlow:'none' };
+  }
+  brands() {
+    return [
+      { name:'金龙娱乐城', status:'certified', licensed:true, score:91, meta:'PAGCOR · 8 年', sub:'出款 38 分 · 解决 92.6% · 保证金 20 万', markets:['MY','SG','PH'] },
+      { name:'皇家娱乐', status:'certified', licensed:true, score:84, meta:'Curacao · 7 年', sub:'出款 55 分 · 解决 88% · 保证金 15 万', markets:['SG','MY','TW'] },
+      { name:'皇冠太平洋', status:'watch', licensed:true, score:78, meta:'Curacao · 6 年', sub:'出款 2.1 小时 · 解决 80% · 1 件仲裁中', markets:['PH','TW','HK'] },
+      { name:'龙腾体育', status:'watch', licensed:true, score:62, meta:'PAGCOR · 5 年', sub:'出款 6 小时 · 解决 70% · 4/5 因子', markets:['PH','VN'] },
+      { name:'赢家体育', status:'watch', licensed:false, score:41, meta:'主体不明 · < 1 年', sub:'拒付 14% · 3 件失联 · 曝光中', markets:['MY','TH','VN'], exposed:true },
+      { name:'星辰彩票', status:'watch', licensed:false, score:null, meta:'自称持牌 · 名录无', sub:'收录 < 30 天 · 样本不足 · 暂无评分', markets:['SG','MY'] },
+      { name:'财神棋牌', status:'blacklist', licensed:false, score:null, meta:'跑路 · 换域名重开', sub:'17 起投诉 · 38,400 U · 钱包与赢家共用', markets:['MY','KH'], exposed:true },
+      { name:'好运棋牌', status:'blacklist', licensed:false, score:null, meta:'关站跑路', sub:'9 起投诉 · 21,600 U · 06-02 列入', markets:['MY','TH'], exposed:true }
+    ];
+  }
+  renderVals() {
+    const theme = this.state.theme || this.props.theme || 'light'; const dark = theme === 'dark'; const c = this.tokens(dark);
+    const lib = this.state.lib || this.props.lib || 'certified'; const region = this.state.region;
+    const defs = [['certified','认证','81',c.green],['watch','非认证','986',c.amber],['licensed','持牌','312',c.ink],['blacklist','黑名单','217',c.red]];
+    const libs = defs.map(([id,label,count,col]) => ({ id,label,count, bg: id===lib ? c.ink : 'transparent', fg: id===lib ? c.bg : c.muted, cfg: id===lib ? c.bg : col, fw: id===lib ? 700 : 500, pick: () => this.setState({ lib: id, open: false }) }));
+    const regs = ['ALL','MY','SG','PH','TH','VN','TW','HK'];
+    const regions = regs.map(r => ({ label: r==='ALL' ? '全部' : r, bd: r===region ? c.ink : c.line, bg: r===region ? c.ink : c.surface, fg: r===region ? c.bg : c.ink, pick: () => this.setState({ region: r, open: false }) }));
+    const all = this.brands().filter(b => lib==='licensed' ? b.licensed : b.status===lib).filter(b => region==='ALL' || b.markets.indexOf(region) >= 0);
+    const rows = all.map((b, i) => {
+      const black = b.status==='blacklist'; const scored = !black && b.score !== null;
+      const col = black ? c.red : (b.score===null ? c.muted : (b.score >= 75 ? c.green : (b.score >= 20 ? c.amber : c.red)));
+      const tagCol = black ? c.red : (b.status==='certified' ? c.green : c.amber);
+      return { rank: i+1, name: b.name, meta: b.meta, sub: b.sub, scored: scored, score: scored ? String(b.score) : '—', scoreColor: col,
+        deg: this.state.armed && scored ? (-90 + 180*b.score/100) : -90, needle: black ? c.red : (scored ? c.needle : c.muted), hub: black ? c.red : (scored ? c.ink : c.muted), glow: scored ? c.needleGlow : 'none',
+        tag: black ? '黑名单' : (b.status==='certified' ? '认证' : (b.exposed ? '曝光中' : (b.licensed ? '持牌' : '观察'))), tagColor: black ? c.bg : (b.exposed ? c.red : tagCol), tagBg: black ? c.red : 'transparent' };
+    });
+    const meta = {
+      certified: { key:'Certified', title:'平台认证名单', sub:'通过认证 + 保证金', link:'认证标准', note:'认证不收费、不可购买。经 BYDP 领码绑定后享先行赔付保障；排序只按公开评分。', kpi:[{v:String(all.length),k:'本筛选',color:c.ink},{v:'87',k:'平均分',color:c.green},{v:'165 万',k:'保证金 U',color:c.green}] },
+      watch: { key:'Watchlist', title:'非认证名单', sub:'已收录 · 观察中', link:'评分方法', note:'观察库品牌可发优惠码但强制风险标签、不享赔付。有曝光案件者以红标提示。', kpi:[{v:String(all.length),k:'本筛选',color:c.ink},{v:'58',k:'平均分',color:c.amber},{v:'19',k:'曝光中',color:c.red}] },
+      licensed: { key:'Licensed', title:'持牌名单', sub:'牌照经监管名录核验 · 筛选视图', link:'核验方法', note:'持牌 ≠ 可信：持牌品牌同样按履约评分，也可能进入黑名单。此为跨库筛选视图。', kpi:[{v:String(all.length),k:'本筛选',color:c.ink},{v:'4',k:'监管机构',color:c.ink},{v:'09-22',k:'最近核验',color:c.ink}] },
+      blacklist: { key:'Blacklist', title:'黑名单', sub:'证据链 + 答辩期后判定', link:'证据标准', note:'黑名单永不接入商业合作，不计评分。附关联换皮站；运营商可随时提交答辩，原文附于曝光页。', kpi:[{v:String(all.length),k:'本筛选',color:c.red},{v:'64',k:'含换皮站',color:c.red},{v:'+3',k:'今日',color:c.red}] }
+    }[lib];
+    const LIM = 4, open = this.state.open;
+    return { c, L: meta, libs, regions, isDark: dark, isLight: !dark, toggleTheme: () => this.setState({ theme: dark ? 'light' : 'dark' }),
+      rowsShown: open ? rows : rows.slice(0, LIM), moreRows: rows.length > LIM, rowsLabel: open ? '收起 ‹' : ('展开全部 ' + rows.length + ' 个 ›'), toggleRows: () => this.setState({ open: !open }) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# 正式环境（bootstrap --prod）：可收录、无门禁（公开站点；禁止启用 Basic Auth——已知会引发 React #418，见 W2#010）；
+# 后台在独立子域 + Cloudflare Access（admin-host.caddy）
+(env_headers) {
+}
+(env_gate) {
+}

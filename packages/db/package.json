@@ -1,0 +1,32 @@
+{
+  "name": "@bydp/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "seed": "tsx scripts/seed.ts",
+    "seed:check": "tsx scripts/seed-check.ts",
+    "seed:demo": "tsx scripts/seed-demo.ts",
+    "grant-role": "tsx scripts/grant-role.ts",
+    "seed:prod": "tsx scripts/seed-prod.ts",
+    "uat-brand": "tsx scripts/uat-brand.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.0",
+    "postgres": "^3.4.7"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.0",
+    "tsx": "^4.20.0",
+    "vitest": "^4.1.0"
+  }
+}

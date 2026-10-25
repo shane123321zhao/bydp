@@ -1,0 +1,21 @@
+.DS_Store
+_to_delete/
+Claude outputs/
+node_modules/
+.next/
+dist/
+.turbo/
+.env
+.env.*
+!.env.example
+mailbox/.approvals/*
+!mailbox/.approvals/.gitkeep
+*.tsbuildinfo
+.drift-*/
+*.pem
+deploy/admin-host.caddy
+deploy/site-mode.caddy
+!deploy/.env.prod.example
+deploy/aop.caddy
+deploy/aop-ca.pem
+e2e/.out/

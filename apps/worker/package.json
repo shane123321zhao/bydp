@@ -1,0 +1,29 @@
+{
+  "name": "@bydp/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "start": "tsx src/index.ts",
+    "score:once": "tsx src/score-once.ts",
+    "demo:recompute": "tsx scripts/demo-recompute.ts",
+    "demo:verify": "tsx scripts/demo-recompute.ts --verify",
+    "import:brands": "tsx src/cli/import-brands.ts",
+    "brand-template": "tsx src/cli/brand-template.ts",
+    "offers:recompute": "tsx src/cli/offers-recompute.ts"
+  },
+  "dependencies": {
+    "@bydp/agents": "workspace:*",
+    "@bydp/core": "workspace:*",
+    "@bydp/scoring": "workspace:*",
+    "bullmq": "^5.0.0",
+    "exceljs": "4.4.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "vitest": "^4.1.0"
+  }
+}

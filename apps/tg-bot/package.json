@@ -1,0 +1,25 @@
+{
+  "name": "@bydp/tg-bot",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bot": "./src/bot.ts"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@bydp/core": "workspace:*",
+    "grammy": "^1.46.0",
+    "ioredis": "5.11.1",
+    "tsx": "^4.20.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  }
+}

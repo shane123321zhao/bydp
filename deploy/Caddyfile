@@ -1,0 +1,73 @@
+# D-009 反代 + 自动 HTTPS（Let's Encrypt，HTTP-01；测试环境不经 Cloudflare，80 须对外开放）。
+# - 真实 IP（HANDOVER §9 #2 · D-020）：只有直接对端属于 Cloudflare 回源段（CF_TRUSTED_PROXIES，bootstrap 部署时拉取，失败用 cloudflare-ips.txt 兜底）
+#   时才采信其 CF-Connecting-IP；其余一律用 TCP 对端地址。反代统一下发 CF-Connecting-IP = {client_ip}（应用据此限流，BYDP_TRUST_PROXY=1）。
+#   未经 Cloudflare 的环境（测试站）CF_TRUSTED_PROXIES = 127.0.0.1/32，等同不信任任何代理。
+# - 国家头（#3）：直接对端不是 Cloudflare 时丢弃客户端自带的 CF-IPCountry / CF-Connecting-IP，应用层 451 只信回源值
+# - 测试站不公开（审核 D-009 #1 的替代：无 Cloudflare Access 时用门禁）；/tg/webhook 与 /v1/postback/* 例外（服务器回调，各自鉴别）
+#   W2#010：门禁由 Basic Auth 改为口令页 + Cookie（Basic Auth 下 React 偶发 #418）
+# - 测试站全站 noindex。D-020 #4：门禁与 noindex 只在测试站——由 bootstrap 生成 site-mode.caddy 定义两个片段
+#   （测试站 = noindex 头 + Cookie 门禁；正式环境 bootstrap --prod = 空片段）
+{
+	servers {
+		trusted_proxies static {$CF_TRUSTED_PROXIES}
+		client_ip_headers CF-Connecting-IP
+	}
+}
+
+import site-mode.caddy
+# D-020 #31：Authenticated Origin Pulls 片段（bootstrap 按 CF_AOP_ENABLED 生成；未启用时为空）
+import aop.caddy
+
+{$SITE_DOMAIN} {
+	import env_tls
+	encode zstd gzip
+	@not_cloudflare not remote_ip {$CF_TRUSTED_PROXIES}
+	request_header @not_cloudflare -CF-IPCountry
+	request_header @not_cloudflare -CF-Connecting-IP
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+	import env_headers
+
+	# D-017：Telegram webhook 不经门禁（Telegram 服务器调用），由 X-Telegram-Bot-Api-Secret-Token 鉴别
+	@tg path /tg/webhook
+	handle @tg {
+		reverse_proxy tg-bot:3300
+	}
+
+	@postback path /v1/postback/*
+	handle @postback {
+		reverse_proxy api:8787 {
+			header_up CF-Connecting-IP {client_ip}
+		}
+	}
+
+	# 测试站门禁（W2#010）：须在上面两条例外之后；正式环境为空片段
+	import env_gate
+
+	handle {
+		# 运营后台（apps/admin，basePath /admin）；网络层正式环境另加 Cloudflare Access（上线前置 #4）
+		# 后台路径：测试站 = /admin /admin/*；配置独立子域（ADMIN_HOST）后主站不再转发后台（bootstrap 置为不可达路径，落到 web 返回 404）
+		@admin path {$ADMIN_PATHS_ON_MAIN}
+		handle @admin {
+			reverse_proxy admin:3200 {
+				header_up CF-Connecting-IP {client_ip}
+			}
+		}
+		@api path /v1/*
+		handle @api {
+			reverse_proxy api:8787 {
+				header_up CF-Connecting-IP {client_ip}
+			}
+		}
+		handle {
+			reverse_proxy web:3100 {
+				header_up CF-Connecting-IP {client_ip}
+			}
+		}
+	}
+}
+
+# D-020 #3：后台独立子域站点（未配置 ADMIN_HOST 时 bootstrap 生成空文件）
+import admin-host.caddy

@@ -1,0 +1,376 @@
+{
+  "_schema": "架构 v1.3 §7 商业域 + 用户域。offer.trueValue 为\"真实价值\"换算；binding.verificationLevel ∈ self_reported|postback_confirmed|operator_confirmed。",
+  "offers": [
+    {
+      "id": "of_001",
+      "brandId": "br_jinlong",
+      "title": "首存 100% 奖励，最高 500 USDT",
+      "type": "first_deposit_match",
+      "matchPercent": 100,
+      "maxBonusUsdt": 500,
+      "minDepositUsdt": 50,
+      "terms": {
+        "rolloverMultiple": 15,
+        "rolloverBase": "deposit_plus_bonus",
+        "maxWithdrawalUsdt": 5000,
+        "validDays": 30,
+        "restrictedGames": [
+          "真人百家乐",
+          "体育"
+        ],
+        "eligibleGames": [
+          "老虎机",
+          "捕鱼"
+        ]
+      },
+      "trueValue": {
+        "exampleDepositUsdt": 200,
+        "bonusUsdt": 200,
+        "requiredTurnoverUsdt": 6000,
+        "expectedCostAtRtp96Usdt": 240,
+        "netExpectedValueUsdt": -40,
+        "verdict": "negative",
+        "verdictText": "按 96% RTP 老虎机打满流水，期望净值约 -40 USDT；奖励实为流水补贴，不是净收益",
+        "methodVersion": "tv-1"
+      },
+      "exclusive": true,
+      "sponsored": false,
+      "riskLabel": null,
+      "compensationEligible": true,
+      "validUntil": "2026-12-31"
+    },
+    {
+      "id": "of_002",
+      "brandId": "br_crown",
+      "title": "体育首单免死 100 USDT",
+      "type": "risk_free_bet",
+      "matchPercent": null,
+      "maxBonusUsdt": 100,
+      "minDepositUsdt": 20,
+      "terms": {
+        "rolloverMultiple": 5,
+        "rolloverBase": "bonus",
+        "maxWithdrawalUsdt": 500,
+        "validDays": 7,
+        "restrictedGames": [],
+        "eligibleGames": [
+          "体育"
+        ]
+      },
+      "trueValue": {
+        "exampleDepositUsdt": 100,
+        "bonusUsdt": 100,
+        "requiredTurnoverUsdt": 500,
+        "expectedCostAtRtp96Usdt": 25,
+        "netExpectedValueUsdt": 33,
+        "verdict": "positive",
+        "verdictText": "首单输掉返还 100 USDT 奖励金，5 倍流水后期望净值约 +33 USDT；上限 500 USDT",
+        "methodVersion": "tv-1"
+      },
+      "exclusive": false,
+      "sponsored": false,
+      "riskLabel": "非认证商家：不享先行赔付保障",
+      "compensationEligible": false,
+      "validUntil": "2026-10-31"
+    },
+    {
+      "id": "of_003",
+      "brandId": "br_jinlong",
+      "title": "周返水 0.8%（真人）",
+      "type": "weekly_rebate",
+      "matchPercent": null,
+      "maxBonusUsdt": null,
+      "minDepositUsdt": 0,
+      "terms": {
+        "rolloverMultiple": 0,
+        "rolloverBase": "none",
+        "maxWithdrawalUsdt": null,
+        "validDays": 7,
+        "restrictedGames": [],
+        "eligibleGames": [
+          "真人百家乐"
+        ],
+        "rebatePercent": 0.8
+      },
+      "trueValue": {
+        "exampleDepositUsdt": 1000,
+        "bonusUsdt": 8,
+        "requiredTurnoverUsdt": 0,
+        "expectedCostAtRtp96Usdt": 0,
+        "netExpectedValueUsdt": 8,
+        "verdict": "positive",
+        "verdictText": "无流水要求，按周结算，返水即净收益",
+        "methodVersion": "tv-1"
+      },
+      "exclusive": false,
+      "sponsored": false,
+      "riskLabel": null,
+      "compensationEligible": true,
+      "validUntil": "2026-12-31"
+    }
+  ],
+  "promoCodes": [
+    {
+      "id": "pc_001",
+      "offerId": "of_001",
+      "code": "BYDP-JL500",
+      "channel": "web",
+      "claimedCount": 1834,
+      "activeUntil": "2026-12-31"
+    },
+    {
+      "id": "pc_002",
+      "offerId": "of_002",
+      "code": "BYDP-CP100",
+      "channel": "web",
+      "claimedCount": 212,
+      "activeUntil": "2026-10-31"
+    },
+    {
+      "id": "pc_003",
+      "offerId": "of_003",
+      "code": "—",
+      "channel": "auto",
+      "claimedCount": 0,
+      "activeUntil": "2026-12-31"
+    }
+  ],
+  "users": [
+    {
+      "id": "u_102",
+      "displayName": "阿明",
+      "identities": [
+        {
+          "provider": "telegram",
+          "handle": "@am***"
+        }
+      ],
+      "level": 3,
+      "points": 2450,
+      "joinedAt": "2026-04-11",
+      "region": "MY",
+      "locale": "zh-Hans"
+    },
+    {
+      "id": "u_233",
+      "displayName": "小龍",
+      "identities": [
+        {
+          "provider": "telegram",
+          "handle": "@xl***"
+        }
+      ],
+      "level": 1,
+      "points": 180,
+      "joinedAt": "2026-08-14",
+      "region": "TW",
+      "locale": "zh-Hant"
+    },
+    {
+      "id": "u_310",
+      "displayName": "阿財",
+      "identities": [
+        {
+          "provider": "telegram",
+          "handle": "@ac***"
+        }
+      ],
+      "level": 1,
+      "points": 60,
+      "joinedAt": "2026-07-18",
+      "region": "MY",
+      "locale": "zh-Hans",
+      "_note": "PO 裁定补齐"
+    },
+    {
+      "id": "u_412",
+      "displayName": "Kevin L.",
+      "identities": [
+        {
+          "provider": "email",
+          "handle": "ke***@g***.com"
+        }
+      ],
+      "level": 2,
+      "points": 620,
+      "joinedAt": "2026-09-10",
+      "region": "PH",
+      "locale": "en",
+      "_note": "PO 裁定补齐"
+    },
+    {
+      "id": "u_509",
+      "displayName": "小美",
+      "identities": [
+        {
+          "provider": "telegram",
+          "handle": "@xm***"
+        }
+      ],
+      "level": 1,
+      "points": 40,
+      "joinedAt": "2026-09-19",
+      "region": "SG",
+      "locale": "zh-Hans",
+      "_note": "PO 裁定补齐"
+    },
+    {
+      "id": "u_777",
+      "displayName": "老陳",
+      "identities": [
+        {
+          "provider": "telegram",
+          "handle": "@lc***"
+        }
+      ],
+      "level": 2,
+      "points": 510,
+      "joinedAt": "2026-08-20",
+      "region": "TW",
+      "locale": "zh-Hant",
+      "_note": "PO 裁定补齐"
+    }
+  ],
+  "userBrandBindings": [
+    {
+      "id": "ubb_001",
+      "userId": "u_102",
+      "brandId": "br_jinlong",
+      "operatorAccountId": "JL88***271",
+      "source": "promo_link",
+      "promoCodeId": "pc_001",
+      "boundAt": "2026-05-02T10:14:22Z",
+      "verificationLevel": "postback_confirmed",
+      "postbackAt": "2026-05-02T10:20:03Z",
+      "compensationEligible": true
+    },
+    {
+      "id": "ubb_002",
+      "userId": "u_233",
+      "brandId": "br_winner",
+      "operatorAccountId": "WS***9021",
+      "source": "manual",
+      "promoCodeId": null,
+      "boundAt": "2026-08-14T08:00:00Z",
+      "verificationLevel": "self_reported",
+      "postbackAt": null,
+      "compensationEligible": false
+    },
+    {
+      "id": "ubb_004",
+      "userId": "u_412",
+      "brandId": "br_crown",
+      "operatorAccountId": "CP***4471",
+      "source": "promo_link",
+      "promoCodeId": "pc_002",
+      "boundAt": "2026-09-10T03:30:00Z",
+      "verificationLevel": "postback_confirmed",
+      "postbackAt": "2026-09-10T03:35:40Z",
+      "compensationEligible": false
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rv_001",
+      "brandId": "br_jinlong",
+      "userId": "u_102",
+      "rating": 5,
+      "text": "提款一直很快，上次 5000 U 遇到风控也在两天内解决了。",
+      "createdAt": "2026-08-06",
+      "trustWeight": 0.9,
+      "verifiedBinding": true,
+      "helpful": 41
+    },
+    {
+      "id": "rv_002",
+      "brandId": "br_jinlong",
+      "userId": "u_777",
+      "rating": 3,
+      "text": "老虎机流水要求偏高，优惠慎领。",
+      "createdAt": "2026-09-02",
+      "trustWeight": 0.6,
+      "verifiedBinding": false,
+      "helpful": 12
+    },
+    {
+      "id": "rv_003",
+      "brandId": "br_winner",
+      "userId": "u_233",
+      "rating": 1,
+      "text": "赢了就说套利，别碰。",
+      "createdAt": "2026-08-16",
+      "trustWeight": 0.85,
+      "verifiedBinding": true,
+      "helpful": 88
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub_001",
+      "userId": "u_102",
+      "targetType": "brand",
+      "targetId": "br_jinlong",
+      "channel": "telegram",
+      "events": [
+        "status_change",
+        "exposure"
+      ]
+    },
+    {
+      "id": "sub_002",
+      "userId": "u_233",
+      "targetType": "complaint",
+      "targetId": "cp_002",
+      "channel": "telegram",
+      "events": [
+        "status_change"
+      ]
+    }
+  ],
+  "notifications": [
+    {
+      "id": "nt_001",
+      "userId": "u_233",
+      "type": "complaint_status",
+      "title": "投诉 #cp_002 已转曝光",
+      "body": "运营商答辩期内两次通知无响应，判定失联。曝光页已发布。",
+      "sentAt": "2026-08-23T09:01:00Z",
+      "read": true
+    },
+    {
+      "id": "nt_002",
+      "userId": "u_102",
+      "type": "brand_status",
+      "title": "金龙娱乐城 通过认证",
+      "body": "保证金 200,000 USDT 已到账并链上公示。你的绑定已具备先行赔付保障资格。",
+      "sentAt": "2026-06-12T00:05:00Z",
+      "read": true
+    }
+  ],
+  "homeFeed": {
+    "todayAlerts": [
+      {
+        "type": "fake_domain",
+        "text": "发现 金龙娱乐城 仿冒站 jin1ong88.com",
+        "at": "2026-09-22"
+      },
+      {
+        "type": "exposure",
+        "text": "赢家体育 拒付并失联，已曝光",
+        "at": "2026-08-23"
+      },
+      {
+        "type": "new_blacklist",
+        "text": "财神棋牌 跑路后换域名 cs-poker.net 重开",
+        "at": "2026-08-12"
+      }
+    ],
+    "stats": {
+      "brandsIndexed": 1284,
+      "blacklisted": 217,
+      "complaintsHandled": 3961,
+      "recoveredUsdt": 412300,
+      "certifiedDepositsUsdt": 1650000
+    }
+  }
+}

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>BCDP 首页</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Noto Sans SC',system-ui,sans-serif;background:#F3F5F7;color:#0B1220;-webkit-font-smoothing:antialiased}
+a{color:#0B1220;text-decoration:none}a:hover{color:#1F5FBF}
+</style>
+</helmet>
+<div style="width: 390px; height: 1640px; box-sizing: border-box; display: flex; flex-direction: column; background: #F3F5F7; position: relative; overflow: hidden;">
+
+  <!-- 顶栏 + Hero（深色信任底） -->
+  <div style="background: #0F1B2D; color: #FFFFFF; padding: 16px 20px 28px 20px; display: flex; flex-direction: column; gap: 22px;">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 32px; height: 32px; border-radius: 8px; background: {{accent}}; display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F1B2D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <span style="font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: 20px; letter-spacing: 0.5px;">BCDP</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button aria-label="切换语言" style="height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.28); background: transparent; color: #FFFFFF; font-size: 13px; font-family: inherit; display: flex; align-items: center; gap: 6px;">简 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button aria-label="通知" style="width: 36px; height: 36px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.28); background: transparent; display: flex; align-items: center; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <h1 style="margin: 0; font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: 32px; line-height: 1.2;">先查，再存。</h1>
+      <p style="margin: 0; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.78);">识别黑盘 · 协助追款曝光 · 认证商家出事，我们先行赔付</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <label for="q" style="font-size: 12px; color: rgba(255,255,255,0.7);">一键查询平台是否可信</label>
+      <div style="display: flex; gap: 8px;">
+        <input id="q" type="text" placeholder="网址 / App / TG 号 / 收款地址 / 名称" style="flex-grow: 1; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: #FFFFFF; color: #0B1220; padding: 0 14px; font-size: 15px; font-family: inherit; min-width: 0;">
+        <a href="CheckResult.dc.html" style="height: 48px; padding: 0 18px; border-radius: 12px; background: {{accent}}; color: #0F1B2D; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">查一下</a>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 12px; color: rgba(255,255,255,0.55); align-self: center;">最近热查</span>
+        <a href="CheckResult.dc.html" style="height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(255,255,255,0.1); color: #FFFFFF; font-size: 12px; display: flex; align-items: center;">cs-poker.net</a>
+        <span style="height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(255,255,255,0.1); color: #FFFFFF; font-size: 12px; display: flex; align-items: center;">jin1ong88.com</span>
+        <span style="height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(255,255,255,0.1); color: #FFFFFF; font-size: 12px; display: flex; align-items: center;">@vip_baccarat_888</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 数据带 -->
+  <div style="margin: -14px 16px 0 16px; background: #FFFFFF; border-radius: 14px; box-shadow: 0 6px 20px rgba(11,18,32,0.08); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 14px 8px;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;"><span style="font-size: 18px; font-weight: 700; letter-spacing: -0.3px;">1,284</span><span style="font-size: 11px; color: #5B6572;">已收录平台</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;"><span style="font-size: 18px; font-weight: 700; color: #B42318; letter-spacing: -0.3px;">217</span><span style="font-size: 11px; color: #5B6572;">黑名单</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;"><span style="font-size: 18px; font-weight: 700; letter-spacing: -0.3px;">3,961</span><span style="font-size: 11px; color: #5B6572;">受理投诉</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;"><span style="font-size: 18px; font-weight: 700; color: #1B7F4E; letter-spacing: -0.3px;">41.2万</span><span style="font-size: 11px; color: #5B6572;">协助追回 USDT</span></div>
+  </div>
+
+  <!-- 内容区 -->
+  <div style="padding: 20px 16px 0 16px; display: flex; flex-direction: column; gap: 22px; flex-grow: 1;">
+
+    <!-- 今日黑盘预警 -->
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+        <h2 style="margin: 0; font-size: 17px; font-weight: 700;">今日黑盘预警</h2>
+        <a href="#" style="font-size: 13px; color: #1F5FBF;">全部 217 条</a>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; border: 1px solid #E5E9EE; display: flex; flex-direction: column;">
+        <a href="#" style="display: flex; gap: 12px; align-items: center; padding: 13px 14px; border-bottom: 1px solid #EEF1F4;">
+          <span style="width: 34px; height: 34px; border-radius: 10px; background: #F3E8FF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/><path d="M3 7l4 5-4 5"/></svg></span>
+          <span style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;"><span style="font-size: 14px; font-weight: 500;">发现 金龙娱乐城 仿冒站 <span style="color: #6D28D9;">jin1ong88.com</span></span><span style="font-size: 12px; color: #5B6572;">字母 l 改为数字 1 · 登录页克隆 · 09-22</span></span>
+          <span style="font-size: 11px; font-weight: 700; color: #6D28D9; background: #F3E8FF; padding: 3px 8px; border-radius: 6px; flex-shrink: 0;">仿冒</span>
+        </a>
+        <a href="#" style="display: flex; gap: 12px; align-items: center; padding: 13px 14px; border-bottom: 1px solid #EEF1F4;">
+          <span style="width: 34px; height: 34px; border-radius: 10px; background: #FDECEA; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
+          <span style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;"><span style="font-size: 14px; font-weight: 500;">赢家体育 以"套利"为由拒付并失联</span><span style="font-size: 12px; color: #5B6572;">投诉 3,800 USDT · 答辩期无响应 · 08-23</span></span>
+          <span style="font-size: 11px; font-weight: 700; color: #B42318; background: #FDECEA; padding: 3px 8px; border-radius: 6px; flex-shrink: 0;">已曝光</span>
+        </a>
+        <a href="CheckResult.dc.html" style="display: flex; gap: 12px; align-items: center; padding: 13px 14px;">
+          <span style="width: 34px; height: 34px; border-radius: 10px; background: #FDECEA; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>
+          <span style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;"><span style="font-size: 14px; font-weight: 500;">财神棋牌 跑路后换域名 cs-poker.net 重开</span><span style="font-size: 12px; color: #5B6572;">17 起投诉 · 收款地址与赢家体育共用 · 08-12</span></span>
+          <span style="font-size: 11px; font-weight: 700; color: #FFFFFF; background: #B42318; padding: 3px 8px; border-radius: 6px; flex-shrink: 0;">黑名单</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 认证推荐 -->
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+        <h2 style="margin: 0; font-size: 17px; font-weight: 700;">平台认证名单</h2>
+        <a href="#" style="font-size: 13px; color: #1F5FBF;">认证标准</a>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; border: 1px solid #CFE8DA; display: flex; flex-direction: column; gap: 14px; padding: 16px 14px;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: #0F1B2D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: 20px; flex-shrink: 0;">金</div>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 16px; font-weight: 700;">金龙娱乐城</span><span style="font-size: 11px; font-weight: 700; color: #FFFFFF; background: #1B7F4E; padding: 2px 7px; border-radius: 5px; display: flex; align-items: center; gap: 3px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>认证</span><span style="font-size: 11px; font-weight: 500; color: #3E4C5A; background: #EEF1F4; padding: 2px 7px; border-radius: 5px;">PAGCOR 持牌</span></div>
+            <span style="font-size: 12px; color: #5B6572;">MY · SG · PH · 运营 8 年</span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex-shrink: 0;">
+            <span style="font-size: 28px; font-weight: 700; color: #1B7F4E; line-height: 1;">91</span>
+            <span style="font-size: 10px; color: #5B6572;">置信度 高 · 5/5 因子</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+          <div style="background: #F3F5F7; border-radius: 10px; padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; align-items: center;"><span style="font-size: 15px; font-weight: 700;">38 分</span><span style="font-size: 11px; color: #5B6572;">出款中位到账</span></div>
+          <div style="background: #F3F5F7; border-radius: 10px; padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; align-items: center;"><span style="font-size: 15px; font-weight: 700;">92.6%</span><span style="font-size: 11px; color: #5B6572;">仲裁解决率</span></div>
+          <div style="background: #F3F5F7; border-radius: 10px; padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; align-items: center;"><span style="font-size: 15px; font-weight: 700;">20 万</span><span style="font-size: 11px; color: #5B6572;">保证金 USDT</span></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #EAF6EF; border-radius: 10px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B7F4E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span style="font-size: 12px; color: #14532D; line-height: 1.5;">经 BCDP 领码注册并绑定，享<strong>先行赔付保障</strong>；保证金链上公示</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="#" style="flex-grow: 1; height: 44px; border-radius: 11px; background: #0F1B2D; color: #FFFFFF; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">领专属码 · 首存最高 500 USDT</a>
+          <a href="#" style="height: 44px; padding: 0 14px; border-radius: 11px; border: 1px solid #D5DAE0; background: #FFFFFF; color: #0B1220; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center;">详情</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 最新结案 -->
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+        <h2 style="margin: 0; font-size: 17px; font-weight: 700;">最新结案</h2>
+        <a href="#" style="font-size: 13px; color: #1F5FBF;">仲裁中心</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="#" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #E5E9EE; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="font-size: 12px; color: #5B6572;">金龙娱乐城 · 提款延迟</span><span style="font-size: 11px; font-weight: 700; color: #1B7F4E; background: #EAF6EF; padding: 2px 8px; border-radius: 6px;">已解决</span></div>
+          <span style="font-size: 14px; font-weight: 500; line-height: 1.45;">提款 5,000 USDT 超 48 小时未到账</span>
+          <span style="font-size: 12px; color: #5B6572;">运营商 16 小时内答辩 · 2 天结案 · 已补付</span>
+        </a>
+        <a href="#" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #E5E9EE; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="font-size: 12px; color: #5B6572;">赢家体育 · 拒付</span><span style="font-size: 11px; font-weight: 700; color: #B42318; background: #FDECEA; padding: 2px 8px; border-radius: 6px;">已曝光</span></div>
+          <span style="font-size: 14px; font-weight: 500; line-height: 1.45;">赢 3,800 USDT 后被指"套利"拒付并冻结账号</span>
+          <span style="font-size: 12px; color: #5B6572;">两次通知无响应 · 判定失联 · 08-23 曝光</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 内容流 -->
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 700;">看懂再玩</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+        <a href="#" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #E5E9EE; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;">
+          <span style="font-size: 11px; font-weight: 700; color: #1F5FBF;">防骗专题</span>
+          <span style="font-size: 14px; font-weight: 700; line-height: 1.4;">仿冒站 5 个特征：域名形近、客服催存、提款先充值</span>
+        </a>
+        <a href="#" style="background: #0F1B2D; color: #FFFFFF; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;">
+          <span style="font-size: 11px; font-weight: 700; color: {{accent}};">策略实验室</span>
+          <span style="font-size: 14px; font-weight: 700; line-height: 1.4;">马丁格尔 10 万次模拟：爆仓概率与真实期望</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 合规声明 -->
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; background: #E9EDF1; border-radius: 12px; font-size: 11px; color: #3E4C5A; line-height: 1.6;">
+      <div style="display: flex; gap: 8px; align-items: center;"><span style="font-size: 12px; font-weight: 700; color: #0B1220; border: 1.5px solid #0B1220; border-radius: 4px; padding: 0 4px;">18+</span><span>本站不向中国大陆居民提供服务。博彩有风险，请理性参与。</span></div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;"><a href="#" style="color: #1F5FBF;">评分方法</a><a href="#" style="color: #1F5FBF;">联盟关系披露</a><a href="#" style="color: #1F5FBF;">服务地区</a><a href="#" style="color: #1F5FBF;">防沉迷中心</a><a href="#" style="color: #1F5FBF;">官方渠道验证</a></div>
+    </div>
+  </div>
+
+  <!-- 底部 Tab -->
+  <nav aria-label="主导航" style="position: absolute; left: 0; right: 0; bottom: 0; height: 76px; background: #FFFFFF; border-top: 1px solid #E5E9EE; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 8px 0 14px 0;">
+    <a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #0F1B2D; font-size: 11px; font-weight: 700;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F1B2D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>首页</a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #5B6572; font-size: 11px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6572" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>查黑盘</a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #5B6572; font-size: 11px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6572" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>优惠</a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #5B6572; font-size: 11px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6572" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M12 9h.01"/></svg>投诉</a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #5B6572; font-size: 11px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6572" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>我的</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F5B942","options":["#F5B942","#5EEAD4","#93C5FD"]},"$preview":{"width":390,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#F5B942' };
+  }
+}
+</script>
+</body>
+</html>

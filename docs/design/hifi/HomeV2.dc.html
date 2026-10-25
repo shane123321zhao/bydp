@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>BCDP 首页 · 方向 B 暗夜雷达</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Noto Sans SC',system-ui,sans-serif;background:#07090C;color:#F2F5F7;-webkit-font-smoothing:antialiased}
+a{color:#F2F5F7;text-decoration:none}a:hover{color:#C6FF4A}
+.num{font-family:'Space Grotesk','Noto Sans SC',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
+@keyframes sweep{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(198,255,74,0.55)}70%{box-shadow:0 0 0 8px rgba(198,255,74,0)}}
+@keyframes ticker{to{transform:translateX(-50%)}}
+@keyframes ring{from{stroke-dashoffset:163.4}to{stroke-dashoffset:14.7}}
+@keyframes draw{from{stroke-dashoffset:400}to{stroke-dashoffset:0}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+@keyframes scan{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.sweep{animation:sweep 3.2s linear infinite}
+.pulse{animation:pulse 1.8s ease-out infinite}
+.ticker{animation:ticker 22s linear infinite}
+.ring{animation:ring 1.6s cubic-bezier(.2,.8,.2,1) .3s both}
+.draw{animation:draw 1.8s ease-out .5s both}
+.rise1{animation:rise .5s ease-out .05s both}.rise2{animation:rise .5s ease-out .15s both}.rise3{animation:rise .5s ease-out .25s both}.rise4{animation:rise .5s ease-out .35s both}.rise5{animation:rise .5s ease-out .45s both}
+.blink{animation:blink 1.2s steps(1) infinite}
+.scan{animation:scan 2.6s linear infinite}
+.glass{background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(14px)}
+</style>
+</helmet>
+<div style="width: 390px; height: 1290px; box-sizing: border-box; position: relative; overflow: hidden; background: #07090C; display: flex; flex-direction: column;">
+
+  <!-- 背景光晕（单色、克制） -->
+  <div style="position: absolute; top: -140px; right: -120px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(closest-side, rgba(198,255,74,0.16), rgba(198,255,74,0));"></div>
+
+  <!-- 顶栏 -->
+  <div class="rise1" style="position: relative; padding: 18px 20px 0 20px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="width: 10px; height: 10px; border-radius: 3px; background: {{accent}}; transform: rotate(45deg); display: block;"></span>
+      <span class="num" style="font-weight: 700; font-size: 17px; letter-spacing: 0.08em;">BCDP</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="glass" style="height: 30px; padding: 0 10px 0 8px; border-radius: 15px; display: flex; align-items: center; gap: 7px; font-size: 11px; color: #C9D1D9;"><span class="pulse" style="width: 6px; height: 6px; border-radius: 3px; background: {{accent}}; display: block;"></span>实时监控 <span class="num" style="color: #F2F5F7; font-weight: 700;">1,284</span> 平台</span>
+      <button aria-label="切换语言" class="glass" style="height: 30px; padding: 0 10px; border-radius: 15px; color: #F2F5F7; font-size: 11px; font-family: inherit; display: flex; align-items: center;">简</button>
+    </div>
+  </div>
+
+  <!-- Hero + 雷达搜索 -->
+  <div class="rise2" style="position: relative; padding: 26px 20px 0 20px; display: flex; flex-direction: column; gap: 18px;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <h1 style="margin: 0; font-size: 44px; font-weight: 900; line-height: 1.02; letter-spacing: -0.03em;">存前<span style="color: {{accent}};">一查</span>。</h1>
+      <p style="margin: 0; font-size: 13px; color: #9AA3AD; letter-spacing: 0.02em;">黑盘 · 仿冒 · 出款 · 关联同伙，一次看清</p>
+    </div>
+
+    <div class="glass" style="position: relative; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow: hidden;">
+      <!-- 雷达 -->
+      <div aria-hidden="true" style="position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; border: 1px solid rgba(198,255,74,0.18); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 130px; height: 130px; border-radius: 50%; border: 1px solid rgba(198,255,74,0.14); display: flex; align-items: center; justify-content: center;"><div style="width: 60px; height: 60px; border-radius: 50%; border: 1px solid rgba(198,255,74,0.12);"></div></div>
+        <div class="sweep" style="position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(198,255,74,0) 0deg, rgba(198,255,74,0.28) 70deg, rgba(198,255,74,0) 71deg);"></div>
+        <span style="position: absolute; left: 38px; top: 112px; width: 6px; height: 6px; border-radius: 3px; background: #FF4D5E; box-shadow: 0 0 10px #FF4D5E;"></span>
+        <span style="position: absolute; left: 90px; top: 60px; width: 5px; height: 5px; border-radius: 3px; background: #FFB020; box-shadow: 0 0 8px #FFB020;"></span>
+      </div>
+      <label for="q2" style="position: relative; font-size: 11px; color: #9AA3AD; letter-spacing: 0.06em;">粘贴任意线索</label>
+      <div style="position: relative; display: flex; gap: 8px;">
+        <input id="q2" type="text" placeholder="网址 · App · TG 号 · 收款地址" style="flex-grow: 1; height: 50px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.45); color: #F2F5F7; padding: 0 14px; font-size: 15px; font-family: inherit; min-width: 0;">
+        <a href="CheckResult.dc.html" aria-label="查询" style="width: 50px; height: 50px; border-radius: 14px; background: {{accent}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#07090C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg></a>
+      </div>
+      <div style="position: relative; display: flex; align-items: center; gap: 8px; font-size: 11px; color: #9AA3AD;">
+        <span class="blink" style="color: {{accent}};">▮</span>
+        <span>今日新增 <span class="num" style="color: #FF4D5E; font-weight: 700;">3</span> 个仿冒站 · <span class="num" style="color: #F2F5F7; font-weight: 700;">217</span> 个黑名单在库</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 预警 ticker -->
+  <div class="rise3" style="position: relative; margin-top: 14px; height: 34px; overflow: hidden; display: flex; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+    <div class="ticker" style="display: flex; gap: 28px; white-space: nowrap; padding-left: 20px; width: max-content;">
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #A78BFA; display: block;"></span>仿冒 · jin1ong88.com 冒充金龙娱乐城</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #FF4D5E; display: block;"></span>曝光 · 赢家体育 拒付 3,800 USDT 并失联</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #FF4D5E; display: block;"></span>黑名单 · 财神棋牌 换域名 cs-poker.net 重开</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #3DDC84; display: block;"></span>结案 · 金龙娱乐城 5,000 USDT 已补付</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #A78BFA; display: block;"></span>仿冒 · jin1ong88.com 冒充金龙娱乐城</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #FF4D5E; display: block;"></span>曝光 · 赢家体育 拒付 3,800 USDT 并失联</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #FF4D5E; display: block;"></span>黑名单 · 财神棋牌 换域名 cs-poker.net 重开</span>
+      <span style="font-size: 12px; color: #C9D1D9; display: flex; align-items: center; gap: 8px;"><span style="width: 6px; height: 6px; border-radius: 3px; background: #3DDC84; display: block;"></span>结案 · 金龙娱乐城 5,000 USDT 已补付</span>
+    </div>
+  </div>
+
+  <!-- Bento -->
+  <div class="rise4" style="position: relative; padding: 16px 16px 0 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+
+    <!-- 认证推荐（高块） -->
+    <a href="#" class="glass" style="grid-row: span 2; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 11px; color: #9AA3AD; letter-spacing: 0.06em;">认证推荐</span>
+        <span style="font-size: 10px; font-weight: 700; color: #07090C; background: #3DDC84; padding: 3px 7px; border-radius: 6px;">认证</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px 0;">
+        <div style="position: relative; width: 84px; height: 84px; display: flex; align-items: center; justify-content: center;">
+          <svg width="84" height="84" viewBox="0 0 64 64" aria-hidden="true" style="position: absolute; inset: 0; transform: rotate(-90deg);"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/><circle class="ring" cx="32" cy="32" r="26" fill="none" stroke="#3DDC84" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="14.7"/></svg>
+          <span class="num" style="font-size: 30px; font-weight: 700; color: #F2F5F7;">91</span>
+        </div>
+        <span style="font-size: 16px; font-weight: 700;">金龙娱乐城</span>
+        <span style="font-size: 11px; color: #9AA3AD;">置信度 高 · PAGCOR 持牌</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+        <div style="display: flex; justify-content: space-between;"><span style="color: #9AA3AD;">出款中位</span><span class="num" style="font-weight: 700;">38 分</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: #9AA3AD;">仲裁解决</span><span class="num" style="font-weight: 700;">92.6%</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: #9AA3AD;">保证金</span><span class="num" style="font-weight: 700; color: #3DDC84;">20万 U</span></div>
+      </div>
+      <span style="margin-top: auto; height: 42px; border-radius: 12px; background: {{accent}}; color: #07090C; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;">领专属码 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#07090C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg></span>
+      <span style="font-size: 10px; color: #9AA3AD; text-align: center;">经此绑定 · 享先行赔付保障</span>
+    </a>
+
+    <!-- 黑名单 -->
+    <a href="#" class="glass" style="border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden;">
+      <span style="font-size: 11px; color: #9AA3AD; letter-spacing: 0.06em;">黑名单</span>
+      <div style="display: flex; align-items: baseline; gap: 6px;"><span class="num" style="font-size: 30px; font-weight: 700; color: #FF4D5E; line-height: 1;">217</span><span class="num" style="font-size: 11px; color: #FF4D5E;">+3 今日</span></div>
+      <svg width="100%" height="34" viewBox="0 0 140 34" preserveAspectRatio="none" aria-hidden="true" style="margin-top: 4px;"><polyline class="draw" points="0,28 18,26 36,27 54,22 72,20 90,14 108,12 126,8 140,4" fill="none" stroke="#FF4D5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="400" stroke-dashoffset="0"/></svg>
+      <span style="font-size: 10px; color: #9AA3AD;">近 30 天新增趋势</span>
+    </a>
+
+    <!-- 投诉受理 -->
+    <a href="#" class="glass" style="border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden;">
+      <span style="font-size: 11px; color: #9AA3AD; letter-spacing: 0.06em;">投诉受理</span>
+      <div style="display: flex; align-items: baseline; gap: 6px;"><span class="num" style="font-size: 30px; font-weight: 700; line-height: 1;">3,961</span></div>
+      <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 4px;">
+        <div style="height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden;"><div style="width: 68%; height: 6px; border-radius: 3px; background: #3DDC84;"></div></div>
+        <span style="font-size: 10px; color: #9AA3AD;">解决率 <span class="num" style="color: #F2F5F7; font-weight: 700;">68%</span> · 中位 <span class="num" style="color: #F2F5F7; font-weight: 700;">4.2</span> 天</span>
+      </div>
+    </a>
+
+    <!-- 今日预警（整行） -->
+    <div class="glass" style="grid-column: span 2; border-radius: 20px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden;">
+      <div class="scan" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, rgba(198,255,74,0), rgba(198,255,74,0.5), rgba(198,255,74,0));"></div>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 13px; font-weight: 700;">今日预警</span>
+        <a href="#" style="font-size: 11px; color: {{accent}};">全部 →</a>
+      </div>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.06);">
+        <span style="font-size: 10px; font-weight: 700; color: #A78BFA; background: rgba(167,139,250,0.14); padding: 3px 7px; border-radius: 6px; flex-shrink: 0;">仿冒</span>
+        <span style="flex-grow: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">jin1ong88.com 冒充金龙娱乐城</span>
+        <span class="num" style="font-size: 11px; color: #9AA3AD; flex-shrink: 0;">09-22</span>
+      </a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.06);">
+        <span style="font-size: 10px; font-weight: 700; color: #FF4D5E; background: rgba(255,77,94,0.14); padding: 3px 7px; border-radius: 6px; flex-shrink: 0;">曝光</span>
+        <span style="flex-grow: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">赢家体育 以"套利"拒付并失联</span>
+        <span class="num" style="font-size: 11px; color: #9AA3AD; flex-shrink: 0;">08-23</span>
+      </a>
+      <a href="CheckResult.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.06);">
+        <span style="font-size: 10px; font-weight: 700; color: #07090C; background: #FF4D5E; padding: 3px 7px; border-radius: 6px; flex-shrink: 0;">黑名单</span>
+        <span style="flex-grow: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">财神棋牌 换域名 cs-poker.net 重开</span>
+        <span class="num" style="font-size: 11px; color: #9AA3AD; flex-shrink: 0;">08-12</span>
+      </a>
+    </div>
+
+    <!-- 策略实验室 -->
+    <a href="#" class="glass" style="border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; min-height: 120px;">
+      <span style="font-size: 11px; color: {{accent}}; letter-spacing: 0.06em;">策略实验室</span>
+      <span style="font-size: 13px; font-weight: 700; line-height: 1.35;">马丁格尔 10 万次模拟</span>
+      <svg width="100%" height="40" viewBox="0 0 140 40" preserveAspectRatio="none" aria-hidden="true"><polyline class="draw" points="0,20 12,17 24,21 36,15 48,19 60,12 72,18 84,10 96,22 108,30 120,37 140,40" fill="none" stroke="#C6FF4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="400" stroke-dashoffset="0"/></svg>
+      <span style="font-size: 10px; color: #9AA3AD;">爆仓概率 <span class="num" style="color: #FF4D5E; font-weight: 700;">97.3%</span> · 看真实期望</span>
+    </a>
+
+    <!-- 防骗 -->
+    <a href="#" class="glass" style="border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; min-height: 120px;">
+      <span style="font-size: 11px; color: #9AA3AD; letter-spacing: 0.06em;">防骗速查</span>
+      <span style="font-size: 13px; font-weight: 700; line-height: 1.35;">仿冒站 5 个特征</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto;">
+        <span style="font-size: 10px; color: #C9D1D9; background: rgba(255,255,255,0.07); padding: 3px 7px; border-radius: 6px;">域名形近</span>
+        <span style="font-size: 10px; color: #C9D1D9; background: rgba(255,255,255,0.07); padding: 3px 7px; border-radius: 6px;">催存</span>
+        <span style="font-size: 10px; color: #C9D1D9; background: rgba(255,255,255,0.07); padding: 3px 7px; border-radius: 6px;">提款先充</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 声明 -->
+  <div class="rise5" style="position: relative; padding: 14px 20px 0 20px; display: flex; align-items: center; gap: 8px; font-size: 10px; color: #6B7580; line-height: 1.5;">
+    <span style="font-weight: 700; color: #9AA3AD; border: 1px solid #9AA3AD; border-radius: 4px; padding: 0 4px; flex-shrink: 0;">18+</span>
+    <span>不向中国大陆居民提供服务 · <a href="#" style="color: #9AA3AD;">评分方法</a> · <a href="#" style="color: #9AA3AD;">联盟披露</a> · <a href="#" style="color: #9AA3AD;">防沉迷</a></span>
+  </div>
+
+  <!-- 悬浮胶囊导航 -->
+  <nav aria-label="主导航" class="glass" style="position: absolute; left: 24px; right: 24px; bottom: 18px; height: 62px; border-radius: 31px; background: rgba(20,24,30,0.82); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; padding: 0 6px; box-shadow: 0 12px 40px rgba(0,0,0,0.6);">
+    <a href="#" aria-current="page" aria-label="首页" style="height: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C6FF4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg><span style="width: 4px; height: 4px; border-radius: 2px; background: #C6FF4A; display: block;"></span></a>
+    <a href="#" aria-label="查黑盘" style="height: 50px; display: flex; align-items: center; justify-content: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9AA3AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <a href="#" aria-label="优惠" style="height: 50px; display: flex; align-items: center; justify-content: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9AA3AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/></svg></a>
+    <a href="#" aria-label="投诉" style="height: 50px; display: flex; align-items: center; justify-content: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9AA3AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></a>
+    <a href="#" aria-label="我的" style="height: 50px; display: flex; align-items: center; justify-content: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9AA3AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#C6FF4A","options":["#C6FF4A","#4AE3FF","#FF7A45","#B48CFF"]},"$preview":{"width":390,"height":1290}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#C6FF4A' };
+  }
+}
+</script>
+</body>
+</html>

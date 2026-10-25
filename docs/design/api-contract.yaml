@@ -1,0 +1,600 @@
+openapi: 3.1.0
+info:
+  title: BYDP 博弈点评 · Public API (P1 draft)
+  version: 0.1.0-draft
+  description: |
+    P1 前后端接口契约草案。由设计稿字段映射表（field-mapping.md）反推；
+    实体命名与 docs/architecture-v1.md §7 一致。仅公开读接口 + 用户写接口；
+    运营后台与运营商 postback 另行定义（apps/api 对外部分）。
+    约定：所有金额 USDT 数值；时间 RFC 3339；分页 cursor；locale 由 Accept-Language 或 ?lang= 决定（zh-Hans 默认）。
+    D-019（2026-10-04，PO 认可开发推荐方案）：中文搜索三处接入——CheckResult.suggestions（未收录态模糊候选）、/lists/{lib}?q=、/brands/{slug}/complaints?q=。
+    搜索经 Meilisearch（索引与查询均 OpenCC 归一到简体，港澳词同义词），不可用时降级 Postgres；只给候选，不改变判定与排序口径。
+servers:
+  - url: https://api.{domain}/v1
+    variables: { domain: { default: bydp.example } }
+tags:
+  - { name: home }
+  - { name: check }
+  - { name: brands }
+  - { name: lists }
+  - { name: complaints }
+  - { name: offers }
+  - { name: me }
+  - { name: config }
+
+paths:
+  /home:
+    get:
+      tags: [home]
+      summary: 首页聚合
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HomePayload' }
+
+  /check:
+    get:
+      tags: [check]
+      summary: 查验任意标识
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string, maxLength: 256 }, description: 域名 / App 包名 / TG 号 / USDT 地址 / 名称 }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckResult' }
+        '429': { description: 限流（反滥用） }
+
+  /brands/{slug}:
+    get:
+      tags: [brands]
+      parameters: [ { $ref: '#/components/parameters/slug' } ]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/BrandDetail' } } } }
+        '404': { description: 未收录 }
+  /brands/{slug}/score:
+    get:
+      tags: [brands]
+      parameters: [ { $ref: '#/components/parameters/slug' } ]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/ScoreSnapshot' } } } }
+  /brands/{slug}/complaints:
+    get:
+      tags: [brands]
+      summary: 公开案件（publicSummary=true）
+      parameters:
+        - { $ref: '#/components/parameters/slug' }
+        - { $ref: '#/components/parameters/cursor' }
+        - { name: q, in: query, description: 'D-019 相关案件搜索：只在该品牌已公开案件的公开标题与 publicDescription 中搜（不含原文）；结果仍按时间倒序；stats 为品牌整体', schema: { type: string, maxLength: 100 } }
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/ComplaintPage' } } } }
+  /brands/{slug}/withdrawals:
+    get:
+      tags: [brands]
+      parameters: [ { $ref: '#/components/parameters/slug' } ]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/WithdrawalStats' } } } }
+  /brands/{slug}/identifiers:
+    get:
+      tags: [brands]
+      parameters: [ { $ref: '#/components/parameters/slug' } ]
+      responses:
+        '200': { content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Identifier' } } } } }
+  /brands/{slug}/offers:
+    get:
+      tags: [brands]
+      parameters: [ { $ref: '#/components/parameters/slug' } ]
+      responses:
+        '200': { content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Offer' } } } } }
+
+  /lists/{lib}:
+    get:
+      tags: [lists]
+      summary: 四库名单
+      parameters:
+        - { name: lib, in: path, required: true, schema: { type: string, enum: [certified, watch, licensed, blacklist] } }
+        - { name: region, in: query, schema: { type: string, enum: [MY, SG, PH, TH, VN, TW, HK] } }
+        - { name: sort, in: query, schema: { type: string, enum: [score_desc, listed_at_desc], default: score_desc } }
+        - { $ref: '#/components/parameters/cursor' }
+        - { name: q, in: query, description: 'D-019 名单内搜索（品牌名三语 / slug / 标识值；简繁 / 港澳写法归一）；在本库条件内过滤（最多 1000 个候选），排序口径不变；KPI「本筛选」等按搜索结果，黑名单「含换皮 / 今日」仍为全库值', schema: { type: string, maxLength: 100 } }
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/ListPage' } } } }
+
+  /cases/{id}:
+    get:
+      tags: [complaints]
+      summary: 公开案件页（仅 publicSummary）
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/CasePublic' } } } }
+        '404': { description: 不公开或不存在 }
+
+  /complaints:
+    post:
+      tags: [complaints]
+      summary: 提交投诉（登录）
+      security: [ { bearer: [] } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ComplaintCreate' }
+      responses:
+        '201': { content: { application/json: { schema: { $ref: '#/components/schemas/ComplaintMine' } } } }
+        '429': { description: '每用户 24 小时投诉数超限（code = rate_limited；审核定稿 3 件）', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /complaints/{id}/evidence:
+    post:
+      tags: [complaints]
+      summary: 上传证据（服务端计算 SHA-256 并存档哈希）
+      security: [ { bearer: [] } ]
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type: { type: string, enum: [screenshot, chat_log, tx_hash, other] }
+                file: { type: string, format: binary }
+                txHash: { type: string }
+      responses:
+        '201': { content: { application/json: { schema: { $ref: '#/components/schemas/Evidence' } } } }
+        '400': { description: '证据为空 / 超 20MB / 文件类型不在白名单（图片 PNG·JPEG·GIF·WebP、PDF、纯文本，按文件头判定）' }
+        '429': { description: '每用户 24 小时证据份数或累计大小超限（code = rate_limited；审核定稿 30 份 / 200MB）', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+  /offers:
+    get:
+      tags: [offers]
+      parameters:
+        - { name: filter, in: query, schema: { type: string, enum: [all, cert, pos, sports, live, slots], default: all } }
+        - { $ref: '#/components/parameters/cursor' }
+      responses:
+        '200': { content: { application/json: { schema: { type: object, properties: { stats: { $ref: '#/components/schemas/OfferStats' }, items: { type: array, items: { $ref: '#/components/schemas/Offer' } }, next: { type: [string, 'null'] } } } } } }
+  /offers/{id}/claim:
+    post:
+      tags: [offers]
+      summary: 领码（登录；记 Click；返回专属码与跟踪链接）
+      security: [ { bearer: [] } ]
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      responses:
+        '200': { content: { application/json: { schema: { type: object, required: [clickId, code, trackingUrl, riskLabel], properties: { clickId: { type: string }, code: { type: [string, 'null'], description: '自动发放类优惠为 null' }, trackingUrl: { type: [string, 'null'], format: uri, description: '跳转主机未通过当前官方标识复核时为 null，前端提示「官网链接待核验」' }, riskLabel: { type: [string, 'null'] } } } } } }
+        '400': { description: '参数错误' }
+        '401': { description: '未登录' }
+        '404': { description: '优惠不存在 / 已下线 / 已过期（code = not_found；过期不单设错误码）', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: '不可领取：品牌为黑名单 / 关联方，或 24h 内已领（返回原 clickId 时为 200）；用户处于自我排除期（code = self_excluded）', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+  /me/preferences:
+    get:
+      summary: 限额提醒偏好（仅提醒，不代扣）
+      security: [{ bearer: [] }]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/Preferences' } } } }
+    put:
+      summary: 更新偏好（整体替换；null = 关闭）
+      security: [{ bearer: [] }]
+      requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/Preferences' } } } }
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/Preferences' } } } }
+        '400': { description: '值域错误' }
+  /me:
+    get:
+      tags: [me]
+      security: [ { bearer: [] } ]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/MePayload' } } } }
+  /me/bindings:
+    get:
+      tags: [me]
+      security: [ { bearer: [] } ]
+      responses:
+        '200': { content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Binding' } } } } }
+    post:
+      tags: [me]
+      summary: 新增绑定（自报级；回传确认后升级）
+      security: [ { bearer: [] } ]
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [brandId, operatorAccountId], properties: { brandId: { type: string }, operatorAccountId: { type: string }, promoCodeId: { type: [string, 'null'] } } }
+      responses:
+        '201': { content: { application/json: { schema: { $ref: '#/components/schemas/Binding' } } } }
+        '400': { description: '参数错误' }
+        '401': { description: '未登录' }
+        '409': { description: '不可绑定：用户处于自我排除期（code = self_excluded），或同品牌已有绑定（code = already_bound）', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /me/complaints/{id}:
+    get:
+      tags: [me]
+      security: [ { bearer: [] } ]
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/ComplaintMine' } } } }
+  /me/subscriptions:
+    post:
+      tags: [me]
+      security: [ { bearer: [] } ]
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [targetType, targetId], properties: { targetType: { type: string, enum: [brand, complaint, candidate] }, targetId: { type: string }, channel: { type: string, enum: [telegram, email], default: telegram } } }
+      responses: { '201': { description: created } }
+  /me/self-exclusion:
+    post:
+      tags: [me]
+      security: [ { bearer: [] } ]
+      requestBody: { content: { application/json: { schema: { type: object, required: [period], properties: { period: { type: string, enum: ['30', '90', '180', '365', 'permanent'], description: '天数或 permanent（永久，不可撤销，且不可再注册）' } } } } } }
+      responses: { '204': { description: ok } }
+  /me/data-requests:
+    post:
+      tags: [me]
+      summary: 隐私请求（证据原文脱敏 / 删除；哈希与状态日志保留）
+      security: [ { bearer: [] } ]
+      requestBody: { content: { application/json: { schema: { type: object, required: [kind], properties: { kind: { type: string, enum: [redact_evidence, delete_evidence, export, anonymize] }, evidenceIds: { type: array, items: { type: string } }, note: { type: [string, 'null'], maxLength: 200 } } } } } }
+      responses: { '202': { description: accepted } }
+  /me/data-requests/{id}/download:
+    get:
+      tags: [me]
+      summary: 「导出我的数据」已完成时取导出包下载链接（预签名，7 天有效；admin 契约 v0.2 协调官补，开发实现时补入）
+      security: [ { bearer: [] } ]
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      responses:
+        '200': { content: { application/json: { schema: { type: object, required: [url, expiresAt], properties: { url: { type: string, format: uri }, expiresAt: { type: string, format: date-time } } } } } }
+        '401': { description: 未登录 }
+        '404': { description: 不存在 / 非导出请求 / 未完成 }
+
+  # ---------------- D-024（A-019 · 迁移 0016）：出款凭证 / 评价提交 ----------------
+  /me/withdrawal-reports:
+    post:
+      tags: [me]
+      summary: 提交出款凭证（须本人在该品牌有未失效、且早于申请提款的绑定；提交后待审，须再上传 ≥ 1 张截图才可采纳；自我排除期允许）
+      security: [ { bearer: [] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [brandId, amountUsdt, method, requestedAt, outcome]
+              properties:
+                brandId: { type: string }
+                amountUsdt: { type: number, exclusiveMinimum: 0 }
+                method: { type: string, maxLength: 40, description: 出款方式，如 USDT-TRC20 / 银行转账 }
+                requestedAt: { type: string, format: date-time, description: 申请提款时间，不得晚于当前时间（容差 10 分钟） }
+                receivedAt: { type: [string, 'null'], format: date-time, description: outcome = paid 时必填，且不早于 requestedAt、不晚于当前时间 }
+                outcome: { type: string, enum: [paid, refused, pending] }
+      responses:
+        '201': { content: { application/json: { schema: { type: object, required: [id, status], properties: { id: { type: string }, status: { type: string, enum: [pending] } } } } } }
+        '401': { description: 未登录 }
+        '409': { description: binding_required, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: invalid_time / invalid_argument（金额须 > 0）, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '429': { description: report_limit（同一绑定 30 天内最多 3 份）, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /me/withdrawal-reports/{id}:
+    patch:
+      tags: [me]
+      summary: 补录出款结果（只能由 pending 补为 paid（带 receivedAt）或 refused，只能一次；判定后补录会提醒仲裁组复看）
+      security: [ { bearer: [] } ]
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      requestBody: { content: { application/json: { schema: { type: object, required: [outcome], properties: { outcome: { type: string, enum: [paid, refused] }, receivedAt: { type: [string, 'null'], format: date-time } } } } } }
+      responses: { '204': { description: ok }, '401': { description: 未登录 }, '422': { description: invalid_time } }
+  /me/withdrawal-reports/{id}/evidence:
+    post:
+      tags: [me]
+      summary: 上传凭证截图（图片 / PDF，按文件头判定；≤ 20MB；服务端 SHA-256；只能挂在本人待审凭证上；计入证据日配额）
+      security: [ { bearer: [] } ]
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      requestBody: { content: { multipart/form-data: { schema: { type: object, required: [file], properties: { file: { type: string, format: binary } } } } } }
+      responses:
+        '201': { content: { application/json: { schema: { type: object, required: [id, sha256], properties: { id: { type: string }, sha256: { type: string } } } } } }
+        '401': { description: 未登录 }
+        '413': { description: 超过 20MB }
+        '429': { description: rate_limited }
+  /me/reviews:
+    post:
+      tags: [me]
+      summary: 提交评价（须本人绑定该品牌；每人每品牌一条有效评价；待审；可信权重按绑定等级由服务端写入；评价文字不公开，只用于计分与计数）
+      security: [ { bearer: [] } ]
+      requestBody: { content: { application/json: { schema: { type: object, required: [brandId, rating], properties: { brandId: { type: string }, rating: { type: integer, minimum: 1, maximum: 5 }, text: { type: [string, 'null'], maxLength: 500 } } } } } }
+      responses:
+        '201': { content: { application/json: { schema: { type: object, required: [id, status], properties: { id: { type: string }, status: { type: string, enum: [pending] } } } } } }
+        '401': { description: 未登录 }
+        '409': { description: binding_required / already_reviewed, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+  /config/points:
+    get:
+      tags: [config]
+      summary: 积分规则（可配置，P1）
+      responses:
+        '200': { content: { application/json: { schema: { type: object, additionalProperties: { type: integer }, example: { binding_confirmed: 500, withdrawal_report_accepted: 50, review_published: 20, complaint_resolved: 100 } } } } }
+  /config/official-channels:
+    get:
+      tags: [config]
+      responses:
+        '200': { content: { application/json: { schema: { type: object, properties: { domains: { type: array, items: { type: string } }, telegram: { type: array, items: { type: string } }, bots: { type: array, items: { type: string } } } } } } }
+
+components:
+  securitySchemes:
+    bearer: { type: http, scheme: bearer }
+  parameters:
+    slug: { name: slug, in: path, required: true, schema: { type: string } }
+    cursor: { name: cursor, in: query, schema: { type: string } }
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      description: '4xx 统一错误体；code 为机器可读枚举，message 为面向用户的中文文案（可为空串）。对外 401 不带 code。'
+      properties:
+        # A-019（D-024）：binding_required（须本人绑定 / 绑定须早于申请提款）· report_limit（同绑定 30 天 ≤ 3 份，429）· already_reviewed · invalid_time（时间在未来 / 到账早于申请，422）
+        code: { type: string, enum: [self_excluded, already_bound, blacklist, related_party, already_claimed, invalid_argument, not_found, rate_limited, open_complaints, binding_required, report_limit, already_reviewed, invalid_time] }
+        message: { type: string }
+    LocalizedName:
+      type: object
+      properties: { zhHans: { type: string }, zhHant: { type: string }, en: { type: string } }
+    BrandStatus: { type: string, enum: [certified, watch, blacklist] }
+    Ownership: { type: string, enum: [official, fake, pending] }
+    Confidence: { type: string, enum: [none, low, medium, high] }
+    Verdict: { type: string, enum: [blacklist, certified, fake, watch, unknown] }
+
+    BrandCard:
+      type: object
+      required: [id, slug, name, status]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { $ref: '#/components/schemas/LocalizedName' }
+        status: { $ref: '#/components/schemas/BrandStatus' }
+        hasActiveExposure: { type: boolean }
+        markets: { type: array, items: { type: string } }
+        license: { oneOf: [{ $ref: '#/components/schemas/License' }, { type: 'null' }] }
+        score: { oneOf: [{ $ref: '#/components/schemas/ScoreBrief' }, { type: 'null' }] }
+        certifiedDepositUsdt: { type: [number, 'null'] }
+        primaryDomain: { type: [string, 'null'], description: 'Identifier(type=domain, ownership=official, primary=true).value；无则 null，前端不显示域名行' }
+        logoUrl: { type: [string, 'null'] }
+        reviewCount: { type: integer, description: 'count(review)，无则 0' }
+        summaryLine: { type: string, description: 名单行副行文案（聚合） }
+
+    ScoreBrief:
+      type: object
+      properties:
+        score: { type: [integer, 'null'], minimum: 0, maximum: 100 }
+        confidence: { $ref: '#/components/schemas/Confidence' }
+        factorsAvailable: { type: integer }
+        factorsTotal: { type: integer }
+        algorithmVersion: { type: string }
+        computedAt: { type: string, format: date-time }
+
+    ScoreSnapshot:
+      allOf:
+        - $ref: '#/components/schemas/ScoreBrief'
+        - type: object
+          properties:
+            factors:
+              type: array
+              items:
+                type: object
+                properties:
+                  key: { type: string }
+                  label: { type: string }
+                  weight: { type: integer }
+                  score: { type: [integer, 'null'] }
+                  available: { type: boolean }
+                  sampleSize: { type: [integer, 'null'] }
+                  detail: { type: string }
+
+    License:
+      type: object
+      properties: { regulator: { type: string }, licenseNo: { type: string }, valid: { type: boolean }, verifiedAt: { type: string, format: date } }
+
+    Identifier:
+      type: object
+      properties:
+        id: { type: string }
+        type: { type: string, enum: [domain, mirror, app, tg, wallet, phone] }
+        value: { type: string }
+        ownership: { $ref: '#/components/schemas/Ownership' }
+        chain: { type: [string, 'null'] }
+        firstSeen: { type: string, format: date }
+        lastChecked: { type: string, format: date }
+        online: { type: boolean }
+        note: { type: [string, 'null'] }
+
+    EntityLinkRow:
+      type: object
+      properties:
+        subject: { type: string, description: 对端标识值或品牌名 }
+        subjectType: { type: string, enum: [identifier, brand] }
+        subjectRef: { type: string, description: identifierId 或 brand slug }
+        linkType: { type: string, enum: [shared_wallet, same_template, impersonates, same_operator, shared_support] }
+        confidence: { type: number, minimum: 0, maximum: 1 }
+        confirmedBy: { type: string, enum: [agent, human] }
+        evidence: { type: string }
+        tag: { type: string }
+
+    TimelineEvent:
+      type: object
+      properties:
+        date: { type: string, format: date-time }
+        subject: { type: string }
+        rest: { type: string }
+        kind: { type: string, enum: [info, decision, warning] }
+
+    Fact:
+      type: object
+      properties: { v: { type: string }, k: { type: string }, tone: { type: string, enum: [neutral, red, amber, green, purple] } }
+
+    CheckResult:
+      type: object
+      required: [query, verdict]
+      properties:
+        query: { type: string }
+        normalized: { type: object, properties: { type: { type: string }, value: { type: string } } }
+        verdict: { $ref: '#/components/schemas/Verdict' }
+        matchNote: { type: string }
+        checkedAt: { type: string, format: date-time }
+        brand: { oneOf: [{ $ref: '#/components/schemas/BrandCard' }, { type: 'null' }] }
+        operatorName: { type: [string, 'null'] }
+        facts: { type: array, maxItems: 3, items: { $ref: '#/components/schemas/Fact' } }
+        related: { type: array, items: { $ref: '#/components/schemas/EntityLinkRow' }, description: 黑名单/观察 }
+        factors: { type: array, items: { type: object }, description: 认证态 ScoreSnapshot.factors }
+        officialIdentifiers: { type: array, items: { $ref: '#/components/schemas/Identifier' }, description: 仿冒态 }
+        riskSignals:
+          type: array
+          description: 未收录态（Agent 采集，待人工确认）
+          items: { type: object, properties: { signal: { type: string }, detail: { type: string }, severity: { type: string, enum: [low, medium, high] }, source: { type: string } } }
+        timeline: { type: array, items: { $ref: '#/components/schemas/TimelineEvent' } }
+        candidate: { type: [object, 'null'], properties: { id: { type: string }, queryCount7d: { type: integer }, weightedPriority: { type: number } } }
+        alternative: { oneOf: [{ $ref: '#/components/schemas/BrandCard' }, { type: 'null' }], description: 认证态不返回 }
+        suggestions: { type: array, maxItems: 5, items: { $ref: '#/components/schemas/BrandCard' }, description: 'D-019 未收录态的模糊候选（按相关度；含黑名单品牌）。只作「你是不是要找」提示，不改变 verdict；其他态不返回' }
+
+    BrandDetail:
+      allOf:
+        - $ref: '#/components/schemas/BrandCard'
+        - type: object
+          properties:
+            operator: { type: object, properties: { legalName: { type: [string, 'null'] }, jurisdiction: { type: [string, 'null'] }, foundedYear: { type: [integer, 'null'] }, relatedParty: { type: boolean } } }
+            counts: { type: object, properties: { complaints: { type: integer }, withdrawalReports: { type: integer }, identifiers: { type: integer }, offers: { type: integer } } }
+            facts: { type: array, items: { $ref: '#/components/schemas/Fact' } }
+            featuredOffer: { oneOf: [{ $ref: '#/components/schemas/Offer' }, { type: 'null' }] }
+            statusHistory: { type: array, items: { $ref: '#/components/schemas/TimelineEvent' } }
+
+    WithdrawalStats:
+      type: object
+      properties:
+        medianMinutes: { type: number }
+        refusalRate: { type: number }
+        sampleSize: { type: integer }
+        buckets: { type: array, items: { type: object, properties: { label: { type: string }, share: { type: number }, count: { type: integer }, note: { type: string } } } }
+        officialChecks: { type: array, items: { type: object, properties: { id: { type: string }, method: { type: string }, amountUsdt: { type: number }, minutes: { type: number }, at: { type: string, format: date-time } } } }
+
+    ComplaintPublic:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        category: { type: string, enum: [refused, delay, frozen, bonus, closed] }
+        status: { type: string, enum: [screening, accepted, awaiting_reply, arbitrating, resolved, rejected, unresolved, exposed] }
+        amountUsdt: { type: number }
+        createdAt: { type: string, format: date-time }
+        resolvedAt: { type: [string, 'null'], format: date-time }
+        exposedAt: { type: [string, 'null'], format: date-time }
+    ComplaintPage:
+      type: object
+      properties:
+        stats: { type: object, properties: { total: { type: integer }, resolveRate: { type: number }, medianResponseDays: { type: number } } }
+        items: { type: array, items: { $ref: '#/components/schemas/ComplaintPublic' } }
+        next: { type: [string, 'null'] }
+
+    CasePublic:
+      allOf:
+        - $ref: '#/components/schemas/ComplaintPublic'
+        - type: object
+          properties:
+            brand: { $ref: '#/components/schemas/BrandCard' }
+            facts: { type: array, items: { $ref: '#/components/schemas/Fact' } }
+            userStatement: { type: string, description: 已脱敏 }
+            userBindingLevel: { type: string, enum: [none, self_reported, postback_confirmed, operator_confirmed] }
+            operatorReply: { type: [object, 'null'], properties: { repliedAt: { type: string, format: date-time }, summary: { type: string }, attachments: { type: integer } } }
+            replyWindow: { type: object, properties: { from: { type: string, format: date-time }, to: { type: string, format: date-time }, notices: { type: integer } } }
+            evidenceHashes: { type: array, items: { type: object, properties: { type: { type: string }, sha256: { type: string }, redacted: { type: boolean } } } }
+            timeline: { type: array, items: { $ref: '#/components/schemas/TimelineEvent' } }
+            related: { type: array, items: { $ref: '#/components/schemas/EntityLinkRow' } }
+
+    Preferences:
+      type: object
+      required: [dailyDepositAlertUsdt, sessionAlertMinutes, nightAlert]
+      properties:
+        dailyDepositAlertUsdt: { type: [integer, 'null'], minimum: 10, maximum: 100000 }
+        sessionAlertMinutes: { type: [integer, 'null'], minimum: 30, maximum: 720 }
+        nightAlert: { type: boolean }
+    ComplaintCreate:
+      type: object
+      required: [brandId, category, amountUsdt, eventDate, description]
+      properties:
+        brandId: { type: string }
+        category: { type: string, enum: [refused, delay, frozen, bonus, closed] }
+        amountUsdt: { type: number, minimum: 0 }
+        eventDate: { type: string, format: date }
+        description: { type: string, maxLength: 500 }
+        bindingId: { type: [string, 'null'] }
+        title: { type: [string, 'null'], maxLength: 60, description: '可选；缺省由服务端按「类型 + 金额」生成' }
+    ComplaintMine:
+      allOf:
+        - $ref: '#/components/schemas/ComplaintPublic'
+        - type: object
+          properties:
+            replyDeadline: { type: [string, 'null'], format: date-time }
+            notices: { type: integer }
+            compensationEligible: { type: boolean }
+            evidence: { type: array, items: { $ref: '#/components/schemas/Evidence' } }
+            timeline: { type: array, items: { $ref: '#/components/schemas/TimelineEvent' } }
+    Evidence:
+      type: object
+      properties: { id: { type: string }, type: { type: string }, label: { type: string }, sha256: { type: string }, uploadedAt: { type: string, format: date-time }, redacted: { type: boolean } }
+
+    Offer:
+      type: object
+      properties:
+        id: { type: string }
+        brand: { $ref: '#/components/schemas/BrandCard' }
+        title: { type: string }
+        type: { type: string }
+        terms:
+          type: object
+          properties: { rolloverMultiple: { type: number }, rolloverBase: { type: string }, maxWithdrawalUsdt: { type: [number, 'null'] }, validDays: { type: integer }, restrictedGames: { type: array, items: { type: string } }, eligibleGames: { type: array, items: { type: string } } }
+        trueValue:
+          type: object
+          properties: { exampleDepositUsdt: { type: number }, bonusUsdt: { type: number }, requiredTurnoverUsdt: { type: number }, expectedCostAtRtp96Usdt: { type: number }, netExpectedValueUsdt: { type: number }, verdict: { type: string, enum: [positive, negative] }, verdictText: { type: string } }
+        exclusive: { type: boolean }
+        sponsored: { type: boolean }
+        riskLabel: { type: [string, 'null'] }
+        compensationEligible: { type: boolean }
+        claimedCount: { type: integer }
+        validUntil: { type: string, format: date }
+    OfferStats:
+      type: object
+      properties: { positive: { type: integer }, subsidy: { type: integer }, claimed: { type: integer } }
+
+    ListPage:
+      type: object
+      properties:
+        lib: { type: string }
+        counts: { type: object, properties: { certified: { type: integer }, watch: { type: integer }, licensed: { type: integer }, blacklist: { type: integer } } }
+        kpi: { type: array, items: { $ref: '#/components/schemas/Fact' } }
+        note: { type: string }
+        items: { type: array, items: { $ref: '#/components/schemas/BrandCard' } }
+        next: { type: [string, 'null'] }
+
+    HomePayload:
+      type: object
+      properties:
+        stats: { type: object, properties: { brandsIndexed: { type: integer }, blacklisted: { type: integer }, blacklistedToday: { type: integer }, complaintsHandled: { type: integer }, resolveRate: { type: number }, medianResolveDays: { type: number }, certifiedDepositsUsdt: { type: number }, series: { type: object, additionalProperties: { type: array, items: { type: number } } } } }
+        alerts: { type: object, properties: { fakeToday: { type: integer }, latestFake: { type: object, properties: { value: { type: string }, impersonates: { type: string } } } } }
+        featured: { $ref: '#/components/schemas/BrandCard' }
+        gauges: { type: array, maxItems: 4, items: { $ref: '#/components/schemas/BrandCard' } }
+        libs: { type: object, properties: { certified: { type: integer }, watch: { type: integer }, licensed: { type: integer }, blacklist: { type: integer } } }
+        hotCandidates: { type: array, items: { type: object, properties: { value: { type: string }, type: { type: string }, queryCount7d: { type: integer } } } }
+        feed: { type: array, items: { type: object, properties: { date: { type: string, format: date }, subject: { type: string }, rest: { type: string }, kind: { type: string, enum: [fake, exposed, blacklist, resolved, watch] }, ref: { type: string } } } }
+        featuredOffer: { $ref: '#/components/schemas/Offer' }
+        content: { type: array, items: { type: object, properties: { type: { type: string, enum: [lab, guide] }, title: { type: string }, meta: { type: string }, slug: { type: string } } } }
+        me: { oneOf: [{ $ref: '#/components/schemas/MeBrief' }, { type: 'null' }] }
+
+    MeBrief:
+      type: object
+      properties: { displayName: { type: string }, bindings: { type: integer }, compensationEligible: { type: boolean }, activeComplaints: { type: integer } }
+    Binding:
+      type: object
+      properties:
+        id: { type: string }
+        brand: { $ref: '#/components/schemas/BrandCard' }
+        operatorAccountIdMasked: { type: string }
+        source: { type: string, enum: [promo_link, manual] }
+        promoCode: { type: [string, 'null'] }
+        boundAt: { type: string, format: date-time }
+        verificationLevel: { type: string, enum: [self_reported, postback_confirmed, operator_confirmed] }
+        compensationEligible: { type: boolean }
+    MePayload:
+      type: object
+      properties:
+        user: { type: object, properties: { displayName: { type: string }, provider: { type: string }, handleMasked: { type: string }, joinedAt: { type: string, format: date }, region: { type: string }, locale: { type: string }, level: { type: integer }, points: { type: integer }, nextLevelAt: { type: integer } } }
+        counts: { type: object, properties: { bindings: { type: integer }, complaintsActive: { type: integer }, complaintsTotal: { type: integer }, codes: { type: integer }, subscriptions: { type: integer } } }
+        bindings: { type: array, items: { $ref: '#/components/schemas/Binding' } }
+        activity: { type: array, items: { type: object, properties: { date: { type: string, format: date }, subject: { type: string }, rest: { type: string }, tag: { type: string }, ref: { type: string } } } }
+        settings: { type: object, properties: { locale: { type: string }, notifications: { type: boolean }, selfExclusion: { oneOf: [{ type: object, required: [period, endsAt], properties: { period: { type: string, enum: ['30', '90', '180', '365', 'permanent'] }, endsAt: { type: [string, 'null'], format: date-time, description: 'null = 永久' } } }, { type: 'null' }] } } }
