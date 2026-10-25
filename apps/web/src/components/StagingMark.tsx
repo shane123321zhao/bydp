@@ -9,6 +9,9 @@ export function StagingMark() {
   return (
     <div className="staging-mark" role="note">
       测试环境 · 演示数据 · 功能未完成，请勿外传
+      {/* D-031：测试站可公开访问后，演示品牌的网址可能与真实网站重名——明确判定与数据均为虚构 */}
+      <br />
+      演示环境：站内品牌、网址与数据均为虚构，仅供体验
     </div>
   );
 }

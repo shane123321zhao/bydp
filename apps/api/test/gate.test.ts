@@ -69,6 +69,9 @@ describe('测试站 Cookie 门禁', () => {
   it('配置：正式环境 / 缺值不注册；Cookie 值须为十六进制（Caddy 正则匹配）', async () => {
     expect(gateConfigFromEnv({ BYDP_ENV: 'production', STAGING_GATE_PASSWORD: 'p', STAGING_GATE_TOKEN: CFG.token })).toBeNull();
     expect(gateConfigFromEnv({ BYDP_ENV: 'staging', STAGING_GATE_PASSWORD: 'p' })).toBeNull();
+    // D-031：STAGING_GATE=off → 公开模式，不注册门禁；其他值（含缺省）照旧开启
+    expect(gateConfigFromEnv({ BYDP_ENV: 'staging', STAGING_GATE: 'off', STAGING_GATE_PASSWORD: 'p', STAGING_GATE_TOKEN: CFG.token })).toBeNull();
+    expect(gateConfigFromEnv({ BYDP_ENV: 'staging', STAGING_GATE: 'on', STAGING_GATE_PASSWORD: 'p', STAGING_GATE_TOKEN: CFG.token })).toEqual({ password: 'p', token: CFG.token });
     expect(gateConfigFromEnv({ BYDP_ENV: 'staging', STAGING_GATE_PASSWORD: 'p', STAGING_GATE_TOKEN: CFG.token })).toEqual({ password: 'p', token: CFG.token });
     expect(() => gateConfigFromEnv({ BYDP_ENV: 'staging', STAGING_GATE_PASSWORD: 'p', STAGING_GATE_TOKEN: 'a.*'.repeat(12) })).toThrow();
     const app = new Hono();

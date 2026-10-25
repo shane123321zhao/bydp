@@ -48,7 +48,7 @@
    1. 预检（系统、内存、磁盘）　2. 安装 Docker　3. 防火墙　4. 生成 `.env.prod`　5. 构建镜像
    6. 数据库：迁移 → 角色密码 → 数据（测试站灌演示数据；正式环境只跑数据守卫，不灌任何演示数据）
    7. 启动服务并健康检查　8. 对外访问检查（HTTPS 证书、测试站门禁、robots）
-3. 测试站访问：浏览器打开站点会出现「测试环境 · 请输入访问口令」页，口令在服务器 `~/bydp/deploy/.env.prod` 的 `STAGING_GATE_PASSWORD`（只在服务器上查看，不要外传）。正式环境没有门禁。
+3. 测试站访问：访问口令**默认开启**——浏览器打开站点会出现「测试环境 · 请输入访问口令」页，口令在服务器 `~/bydp/deploy/.env.prod` 的 `STAGING_GATE_PASSWORD`（只在服务器上查看，不要外传）。要让测试站公开访问，在 `.env.prod` 加一行 `STAGING_GATE=off` 后重跑 bootstrap（noindex 照旧）；删掉该行再重跑即恢复。正式环境没有门禁。
 
 ## 5. 第一个管理员
 
@@ -79,7 +79,7 @@ sudo docker compose -f compose.prod.yml --env-file .env.prod run --rm --no-deps 
 
 | 项 | 测试环境（`--staging`） | 正式环境（`--prod`） |
 |---|---|---|
-| 访问 | Caddy Cookie 门禁：无 `bydp_gate` Cookie 一律口令页，口令正确下发 30 天 Cookie；口令提交每 IP 每分钟 ≤ 10 次；`/tg/webhook`、`/v1/postback/*` 例外 | 公开；**禁止启用 Basic Auth**（已知会引发 React 水合报错 #418） |
+| 访问 | 默认 Caddy Cookie 门禁：无 `bydp_gate` Cookie 一律口令页，口令正确下发 30 天 Cookie；口令提交每 IP 每分钟 ≤ 10 次；`/tg/webhook`、`/v1/postback/*` 例外。`STAGING_GATE=off` 时公开访问（顶部提示条注明数据虚构） | 公开；**禁止启用 Basic Auth**（已知会引发 React 水合报错 #418） |
 | 收录 | robots 全站 Disallow、`X-Robots-Tag: noindex`、标题带「测试环境」 | 可收录（未定稿译本 noindex） |
 | 后台 | 同域 `/admin` | 独立子域 + Cloudflare Access（go-live.md） |
 | 真实 IP / 地区 | 不经 Cloudflare：Caddy 用 TCP 对端地址，丢弃客户端自带的 `CF-*` 头；应用层大陆 451 拿不到国家头，**测试站不生效** | 只信任 Cloudflare 回源段的 `CF-Connecting-IP` / `CF-IPCountry`；源站防火墙只接受 Cloudflare |

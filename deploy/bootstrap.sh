@@ -154,7 +154,10 @@ ADMIN_HOST=$(grep -E '^ADMIN_HOST=' .env.prod.input | cut -d= -f2- | tr -d ' ')
 if [ -n "$ADMIN_HOST" ]; then
   for k in CF_ACCESS_TEAM_DOMAIN CF_ACCESS_AUD; do grep -qE "^$k=.+" .env.prod.input || fail "配置 ADMIN_HOST 时须在 .env.prod.input 填 $k（见 docs/ops/cloudflare-access.md 第 4 节）"; done
 fi
-cp "site-mode.$MODE.caddy" site-mode.caddy
+# D-031：测试站门禁开关——.env.prod 中 STAGING_GATE=off 时用公开片段（noindex 照旧、不设门禁）；缺省 / 其他值一律开启门禁（失败即关）
+GATE_OFF=0
+[ $PROD = 0 ] && grep -qE '^STAGING_GATE=off$' .env.prod 2>/dev/null && GATE_OFF=1
+if [ $GATE_OFF = 1 ]; then cp site-mode.staging-open.caddy site-mode.caddy; else cp "site-mode.$MODE.caddy" site-mode.caddy; fi
 # D-020 #31：AOP 开关（默认关）。aop-ca.pem 不存在时建空文件（避免 Docker 把缺失的挂载源建成目录）；开关为 1 而证书缺失 / 非法 → 拒绝部署
 AOP=$(grep -E '^CF_AOP_ENABLED=' .env.prod.input | cut -d= -f2- | tr -d "\"' \r" || true)
 [ -e aop-ca.pem ] || : > aop-ca.pem
@@ -234,6 +237,16 @@ if [ $PROD = 1 ]; then
   if [ "$CODE" = "200" ] && [ "$ADM" != "200" ]; then pass "https://$SITE_DOMAIN 返回 200 · 主站 /admin 返回 $ADM（后台只在 $ADMIN_HOST）· robots: $ROBOTS"
   else printf '⚠️ 待定 ｜ https://%s 返回 %s，/admin 返回 %s：DNS / 证书未就绪或配置异常\n' "$SITE_DOMAIN" "${CODE:-无响应}" "${ADM:-无响应}"; fi
   echo; echo "正式环境部署完成。Cloudflare 就绪自检：bash scripts/cf-ready-check.sh $SITE_DOMAIN <服务器IP> --server"
+  exit 0
+fi
+if [ $GATE_OFF = 1 ]; then
+  # D-031 公开模式：无 Cookie 直接 200，且仍带 noindex 头
+  NOINDEX=$(curl -s -D - -o /dev/null --max-time 20 "https://$SITE_DOMAIN/" | grep -ci '^x-robots-tag: noindex' || true)
+  ROBOTS=$(curl -s --max-time 20 "https://$SITE_DOMAIN/robots.txt" | tr '\n' ' ' || true)
+  if [ "$CODE" = "200" ] && [ "${NOINDEX:-0}" -ge 1 ]; then pass "https://$SITE_DOMAIN 公开访问（STAGING_GATE=off）返回 200，仍带 noindex · robots: $ROBOTS"
+  elif [ -n "$CODE" ] && [ "$CODE" != "000" ]; then fail "公开模式异常：无 Cookie 返回 $CODE · noindex 头 ${NOINDEX:-0}"
+  else printf '⚠️ 待定 ｜ https://%s 返回 %s：DNS 未指向本机或证书尚未签发\n' "$SITE_DOMAIN" "${CODE:-无响应}"; fi
+  echo; echo "测试站访问：公开模式（STAGING_GATE=off），无需口令；恢复门禁：删掉该行后重跑 bootstrap"
   exit 0
 fi
 # 门禁：无 Cookie → 401 口令页（不含站点内容）；带 Cookie（经 stdin 传给 curl，不出现在命令行）→ 200

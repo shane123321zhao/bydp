@@ -21,6 +21,8 @@ export type GateConfig = { password: string; token: string };
 
 export function gateConfigFromEnv(env: Record<string, string | undefined> = process.env): GateConfig | null {
   if (env.BYDP_ENV === 'production') return null;
+  // D-031：测试站公开模式（.env.prod 中 STAGING_GATE=off）不注册门禁路由；缺省开启
+  if (env.STAGING_GATE === 'off') return null;
   const password = env.STAGING_GATE_PASSWORD?.trim();
   const token = env.STAGING_GATE_TOKEN?.trim();
   if (!password || !token) return null;

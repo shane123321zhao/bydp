@@ -1,0 +1,7 @@
+# 测试站 · 公开模式（D-031：.env.prod 中 STAGING_GATE=off 时由 bootstrap 选用）：全站 noindex 照旧，不设门禁。
+# 恢复门禁：删掉 STAGING_GATE=off（或改为 on）后重跑 bootstrap，即换回 site-mode.staging.caddy。
+(env_headers) {
+	header X-Robots-Tag "noindex, nofollow"
+}
+(env_gate) {
+}
