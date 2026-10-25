@@ -44,6 +44,8 @@ pnpm dev                          # 启动各应用（web 默认 http://localhos
 
 ## 测试与检查
 
+前置：`pnpm i`；Postgres 16 客户端二进制（`pnpm run ci` 用它起临时库；默认 macOS Postgres.app 路径，Linux 设 `PGBIN=/usr/lib/postgresql/16/bin`）；可选 Redis 6379（`docker compose up -d redis`，不可达时 Redis 联调用例跳过）、poppler `pdftoppm`（缺则 PDF 预览用例跳过）。
+
 ```bash
 pnpm run ci        # 全量：lint · typecheck · 依赖边界 · 临时 PG16 上迁移 + seed + 全部测试 · web 冒烟
 pnpm test          # 只跑单元 / 集成测试（需 DATABASE_URL）

@@ -6,7 +6,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 # 0/4 双签闸门（工具无关）：常态由 .githooks/pre-commit 在提交时强制；CI 抽查模式 CI_CHECK_APPROVALS=1 时复核最近一次提交（签核文件用完即删，故默认不在 CI 复核）
-[ "$(git config core.hooksPath)" = ".githooks" ] || { echo "CI FAIL: core.hooksPath 未设为 .githooks（双签闸门被关闭）。执行: git config core.hooksPath .githooks"; exit 1; }
+# D-036：交付仓库不含 .githooks（内部钩子不随快照交付）→ 跳过；目录存在时照旧严格检查
+if [ ! -d .githooks ]; then echo "== 0/4 交付版无内部钩子，跳过 hooksPath 检查"
+else [ "$(git config core.hooksPath)" = ".githooks" ] || { echo "CI FAIL: core.hooksPath 未设为 .githooks（双签闸门被关闭）。执行: git config core.hooksPath .githooks"; exit 1; }; fi
 rm -f packages/scoring/src/__isolation_probe__.ts  # 上次中断残留的隔离探针，避免 deps:check 误报
 if [ "${CI_CHECK_APPROVALS:-0}" = "1" ]; then bash .claude/hooks/approvals-check.sh head || { echo "CI FAIL: 双签闸门"; exit 1; }; fi
 PGBIN=${PGBIN:-/Applications/Postgres.app/Contents/Versions/16/bin}
